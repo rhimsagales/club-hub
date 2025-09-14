@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="synthwave">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Rubik+Dirt&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/global-custom.css">
+    <title>Recruit Members - ClubHub</title>
+    <style>
+        .input-error {
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2) !important;
+        }
+    </style>
+</head>
+<body class="bg-base-200 w-full min-h-screen inter text-base-content">
+    <div class="navbar bg-base-100 shadow-sm px-8 fixed top-0 z-[20]">
+        <div class="navbar-center">
+            <a href="admin-dashboard.html" class="btn btn-ghost text-4xl cherry-bomb-one-regular text-primary">ClubHub</a>
+        </div>
+    </div>
+    <main class="w-full min-h-screen flex items-center justify-center flex-col gap-2 pt-16">
+        <div class="w-[75%] max-w-3xl flex flex-col items-center">
+            <h1 class="text-4xl font-bold text-accent my-6 text-center w-full">Recruit Club Members</h1>
+
+        </div>
+        <div class="w-[75%] max-w-3xl">
+            <div class="card bg-base-100 shadow-lg p-8">
+                <!-- Progress Indicator -->
+                <div class="w-full mb-8">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-full bg-primary text-primary-content flex items-center justify-center text-sm font-bold" id="step1-indicator">1</div>
+                                <span class="ml-2 text-sm font-medium" id="step1-text">Club Selection</span>
+                            </div>
+                            <div class="w-16 h-0.5 bg-base-300" id="progress-line"></div>
+                            <div class="flex items-center">
+                                <div class="w-8 h-8 rounded-full bg-base-300 text-base-content flex items-center justify-center text-sm font-bold" id="step2-indicator">2</div>
+                                <span class="ml-2 text-sm font-medium text-base-content/70" id="step2-text">Member Info</span>
+                            </div>
+                        </div>
+                        <div class="text-sm text-base-content/70">
+                            <span id="current-step">Step 1 of 2</span>
+                        </div>
+                    </div>
+                </div>
+                <form class="space-y-8" id="recruitForm">
+                    <!-- Page 1: Club Selection -->
+                    <div id="page1" class="form-page space-y-8">
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text text-lg font-semibold">Select Club *</span>
+                            </label>
+                            <select name="club" class="select select-bordered w-full" required>
+                                <option value="" disabled selected>Choose a club</option>
+                                <option value="Academic">Academic</option>
+                                <option value="Sports">Sports</option>
+                                <option value="Cultural">Cultural</option>
+                                <option value="Social">Social</option>
+                                <option value="Professional">Professional</option>
+                                <option value="Religious">Religious</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Page 2: Member Info -->
+                    <div id="page2" class="form-page hidden space-y-8">
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Full Name *</span>
+                            </label>
+                            <input type="text" name="name" placeholder="Enter your name" class="input input-bordered w-full" required />
+                        </div>
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Email Address *</span>
+                            </label>
+                            <input type="email" name="email" placeholder="Enter your email" class="input input-bordered w-full" required />
+                        </div>
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Phone Number *</span>
+                            </label>
+                            <input type="tel" name="number" placeholder="Enter your phone number" class="input input-bordered w-full" required />
+                        </div>
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Section *</span>
+                            </label>
+                            <input type="text" name="section" placeholder="Enter your section" class="input input-bordered w-full" required />
+                        </div>
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Year Level *</span>
+                            </label>
+                            <input type="text" name="yearLevel" placeholder="Enter your year level" class="input input-bordered w-full" required />
+                        </div>
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Student ID *</span>
+                            </label>
+                            <input type="text" name="studentId" placeholder="Enter your student ID" class="input input-bordered w-full" required />
+                        </div>
+                    </div>
+                    <!-- Navigation Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-4 justify-between pt-6">
+                        <div class="flex gap-4">
+                            <button type="button" id="prevBtn" class="btn btn-outline btn-error hidden">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                                </svg>
+                                Previous
+                            </button>
+                        </div>
+                        <div>
+                            <button type="button" id="nextBtn" class="btn btn-primary">
+                                Next
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                            <button type="submit" id="submitBtn" class="btn btn-primary hidden">
+                                Submit
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-5">
+                                    <path d="M3.478 2.404a.75.75 0 0 0-.926.941l2.432 7.905H13.5a.75.75 0 0 1 0 1.5H4.984l-2.432 7.905a.75.75 0 0 0 .926.94 60.519 60.519 0 0 0 18.445-8.986.75.75 0 0 0 0-1.218A60.517 60.517 0 0 0 3.478 2.404Z" />
+                                </svg>
+                                  
+                                
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('recruitForm');
+            const page1 = document.getElementById('page1');
+            const page2 = document.getElementById('page2');
+            const nextBtn = document.getElementById('nextBtn');
+            const prevBtn = document.getElementById('prevBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            // Progress indicators
+            const step1Indicator = document.getElementById('step1-indicator');
+            const step1Text = document.getElementById('step1-text');
+            const step2Indicator = document.getElementById('step2-indicator');
+            const step2Text = document.getElementById('step2-text');
+            const progressLine = document.getElementById('progress-line');
+            const currentStep = document.getElementById('current-step');
+            let currentPage = 1;
+            function showPage(page) {
+                if (page === 1) {
+                    page1.classList.remove('hidden');
+                    page2.classList.add('hidden');
+                    nextBtn.classList.remove('hidden');
+                    submitBtn.classList.add('hidden');
+                    prevBtn.classList.add('hidden');
+                    step1Indicator.classList.remove('bg-base-300', 'text-base-content');
+                    step1Indicator.classList.add('bg-primary', 'text-primary-content');
+                    step1Text.classList.remove('text-base-content/70');
+                    step1Text.classList.add('text-base-content');
+                    step2Indicator.classList.remove('bg-primary', 'text-primary-content');
+                    step2Indicator.classList.add('bg-base-300', 'text-base-content');
+                    step2Text.classList.remove('text-base-content');
+                    step2Text.classList.add('text-base-content/70');
+                    progressLine.classList.remove('bg-primary');
+                    progressLine.classList.add('bg-base-300');
+                    currentStep.textContent = 'Step 1 of 2';
+                } else {
+                    page1.classList.add('hidden');
+                    page2.classList.remove('hidden');
+                    nextBtn.classList.add('hidden');
+                    submitBtn.classList.remove('hidden');
+                    prevBtn.classList.remove('hidden');
+                    step1Indicator.classList.remove('bg-primary', 'text-primary-content');
+                    step1Indicator.classList.add('bg-base-300', 'text-base-content');
+                    step1Text.classList.remove('text-base-content');
+                    step1Text.classList.add('text-base-content/70');
+                    step2Indicator.classList.remove('bg-base-300', 'text-base-content');
+                    step2Indicator.classList.add('bg-primary', 'text-primary-content');
+                    step2Text.classList.remove('text-base-content/70');
+                    step2Text.classList.add('text-base-content');
+                    progressLine.classList.remove('bg-base-300');
+                    progressLine.classList.add('bg-primary');
+                    currentStep.textContent = 'Step 2 of 2';
+                }
+                currentPage = page;
+            }
+            function validateFields(container) {
+                const requiredFields = container.querySelectorAll('[required]');
+                let isValid = true;
+                requiredFields.forEach(field => {
+                    let isEmpty = false;
+                    if (field.type === 'checkbox') {
+                        isEmpty = !field.checked;
+                    } else if (field.tagName === 'SELECT') {
+                        isEmpty = !field.value || field.value === '';
+                    } else {
+                        isEmpty = !field.value.trim();
+                    }
+                    if (isEmpty) {
+                        field.classList.add('input-error');
+                        isValid = false;
+                    } else {
+                        field.classList.remove('input-error');
+                    }
+                });
+                return isValid;
+            }
+            nextBtn.addEventListener('click', () => {
+                if (validateFields(page1)) {
+                    showPage(2);
+                } else {
+                    alert('Please select a club before proceeding.');
+                }
+            });
+            prevBtn.addEventListener('click', () => {
+                showPage(1);
+            });
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const page1Valid = validateFields(page1);
+                const page2Valid = validateFields(page2);
+                if (!page1Valid || !page2Valid) {
+                    alert('Please fill in all required fields before submitting.');
+                    return;
+                }
+                alert('Your application has been submitted!');
+                form.reset();
+                showPage(1);
+            });
+            showPage(1);
+        });
+    </script>
+</body>
+</html>

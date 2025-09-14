@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="synthwave">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Rubik+Dirt&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/global-custom.css">
+    <style>
+        .input-error {
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2) !important;
+        }
+        .form-page {
+            transition: all 0.3s ease-in-out;
+        }
+    </style>
+    <title>Create Club - ClubHub</title>
+</head>
+<body class="bg-base-200 w-full min-h-screen inter text-base-content">
+    <div class="navbar bg-base-100 shadow-sm px-8 fixed top-0 z-[20]">
+        <div class="navbar-start">
+            <div class="dropdown">
+                <div tabindex="0" role="button" class="btn btn-ghost btn-circle tooltip tooltip-right flex items-center justify-center" data-tip="Navigation">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-accent" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 6h16M4 12h16M4 18h7" />
+                    </svg>
+                </div>
+                <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                    <li><a href="admin-dashboard.html">Dashboard</a></li>
+                    <li><a class="active">Create Club</a></li>
+                    <li><a href="manage-club.html">Manage Club</a></li>
+                    <li><a href="report-bug.html">Report a bug</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="navbar-center">
+            <a href="admin-dashboard.html" class="btn btn-ghost text-4xl cherry-bomb-one-regular text-primary">ClubHub</a>
+        </div>
+        <div class="navbar-end">
+            <div class="dropdown dropdown-end">
+                <div tabindex="0" role="button" class="btn m-1 btn-circle btn-ghost tooltip tooltip-left flex items-center justify-center hover:bg-base-300" data-tip="Activity Logs">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
+                        <path
+                            d="M5.85 3.5a.75.75 0 0 0-1.117-1 9.719 9.719 0 0 0-2.348 4.876.75.75 0 0 0 1.479.248A8.219 8.219 0 0 1 5.85 3.5ZM19.267 2.5a.75.75 0 1 0-1.118 1 8.22 8.22 0 0 1 1.987 4.124.75.75 0 0 0 1.48-.248A9.72 9.72 0 0 0 19.266 2.5Z" />
+                        <path fill-rule="evenodd"
+                            d="M12 2.25A6.75 6.75 0 0 0 5.25 9v.75a8.217 8.217 0 0 1-2.119 5.52.75.75 0 0 0 .298 1.206c1.544.57 3.16.99 4.831 1.243a3.75 3.75 0 1 0 7.48 0 24.583 24.583 0 0 0 4.83-1.244.75.75 0 0 0 .298-1.205 8.217 8.217 0 0 1-2.118-5.52V9A6.75 6.75 0 0 0 12 2.25ZM9.75 18c0-.034 0-.067.002-.1a25.05 25.05 0 0 0 4.496 0l.002.1a2.25 2.25 0 1 1-4.5 0Z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-80 p-2 shadow-sm">
+                    <li class="menu-title">Activity Logs</li>
+                    <li><a>Item 1</a></li>
+                    <li><a>Item 2</a></li>
+                </ul>
+            </div>
+            <div class="dropdown dropdown-end tooltip tooltip-left" data-tip="Change theme">
+                <div tabindex="0" role="button" class="btn btn-circle btn-ghost btn-sm hover:bg-base-300">
+                    <div
+                        class="bg-base-100 group-hover:border-base-content/20 border-base-content/10 grid shrink-0 grid-cols-2 gap-0.5 rounded-md border p-1 transition-colors">
+                        <div class="bg-base-content size-1 rounded-full"></div>
+                        <div class="bg-primary size-1 rounded-full"></div>
+                        <div class="bg-secondary size-1 rounded-full"></div>
+                        <div class="bg-accent size-1 rounded-full"></div>
+                    </div>
+                </div>
+                <ul tabindex="0" class="menu dropdown-content bg-base-100 rounded-box z-1 mt-4 w-52 p-2 shadow-sm gap-2">
+                    <li class="menu-title">Theme</li>
+                    <li>
+                        <input type="radio" name="theme-buttons" class="btn btn-xs rounded-full theme-controller join-item default-theme" aria-label="Default" value="default" />
+                    </li>
+                    <li>
+                        <input type="radio" name="theme-buttons" class="btn btn-xs rounded-full theme-controller join-item" aria-label="Night" value="night" />
+                    </li>
+                    <li>
+                        <input type="radio" name="theme-buttons" class="btn btn-xs rounded-full theme-controller join-item" aria-label="Light" value="bumblebee" />
+                    </li>
+                    <li>
+                        <input type="radio" name="theme-buttons" class="btn btn-xs rounded-full theme-controller join-item" aria-label="Lofi" value="lofi" />
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <main class="w-full min-h-screen flex items-center justify-center flex-col gap-2 pt-16">
+        <h1 class="w-[70%] text-4xl font-bold text-accent my-6 inline-block">🏗️ Create New Club</h1>
+        
+        <!-- Form Container -->
+        <div class="w-[70%] max-w-4xl">
+            <div class="card bg-base-100 shadow-lg">
+                <div class="card-body p-8">
+                    <!-- Progress Indicator -->
+                    <div class="w-full mb-8">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 rounded-full bg-primary text-primary-content flex items-center justify-center text-sm font-bold" id="step1-indicator">1</div>
+                                    <span class="ml-2 text-sm font-medium" id="step1-text">Basic Information</span>
+                                </div>
+                                <div class="w-16 h-0.5 bg-base-300" id="progress-line"></div>
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 rounded-full bg-base-300 text-base-content flex items-center justify-center text-sm font-bold" id="step2-indicator">2</div>
+                                    <span class="ml-2 text-sm font-medium text-base-content/70" id="step2-text">Additional Details</span>
+                                </div>
+                            </div>
+                            <div class="text-sm text-base-content/70">
+                                <span id="current-step">Step 1 of 2</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form class="space-y-8" id="createClubForm">
+                        <!-- Page 1: Basic Information -->
+                        <div id="page1" class="form-page space-y-8">
+                            <!-- Club Basic Information -->
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text text-lg font-semibold">📝 Club Information</span>
+                                </label>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="label-text">Club Name *</span>
+                                    </label>
+                                    <input type="text" name="clubName" placeholder="Enter club name" class="input input-bordered w-full required-field" />
+                                </div>
+                                
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="label-text">Club Type *</span>
+                                    </label>
+                                    <select name="clubType" class="select select-bordered w-full required-field">
+                                        <option value="" disabled selected>Choose club type</option>
+                                        <option value="Academic">Academic</option>
+                                        <option value="Sports">Sports</option>
+                                        <option value="Cultural">Cultural</option>
+                                        <option value="Social">Social</option>
+                                        <option value="Professional">Professional</option>
+                                        <option value="Religious">Religious</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-control w-full">
+                                    <label class="label">
+                                        <span class="label-text">Username *</span>
+                                    </label>
+                                    <input type="text" name="username" placeholder="Enter username" class="input input-bordered w-full required-field" />
+                            </div>
+                            <div class="form-control w-full">
+                                <label class="label">
+                                    <span class="label-text">Club Password *</span>
+                                </label>
+                                <div class="relative">
+                                    <input type="password" name="clubPassword" id="clubPassword" placeholder="Enter password" class="input input-bordered w-full pr-12 required-field" />
+                                    <button type="button" id="togglePassword" class="absolute right-2 top-2 btn btn-xs btn-ghost" tabindex="-1">
+                                        <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-control flex flex-col grow">
+                                <label class="label">
+                                    <span class="label-text">Club Description *</span>
+                                </label>
+                                <textarea name="clubDescription" class="textarea textarea-bordered h-24 w-full required-field" placeholder="Describe your club's purpose and activities..."></textarea>
+                            </div>
+
+                            <!-- Contact Information -->
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text text-lg font-semibold">📞 Contact Information</span>
+                                </label>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="label-text">Club Owner/Leader *</span>
+                                    </label>
+                                    <input type="text" name="clubOwner" placeholder="Enter owner/leader name" class="input input-bordered w-full required-field" />
+                                </div>
+                                
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="label-text">Email Address *</span>
+                                    </label>
+                                    <input type="text" name="email" placeholder="Enter email address" class="input input-bordered w-full required-field" />
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="label-text">Phone Number</span>
+                                    </label>
+                                    <input type="tel" name="phone" placeholder="Enter phone number" class="input input-bordered w-full" />
+                                </div>
+                                
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="label-text">Social Media Link</span>
+                                    </label>
+                                    <input type="text" name="socialMedia" placeholder="Enter social media URL" class="input input-bordered w-full" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Page 2: Additional Details -->
+                        <div id="page2" class="form-page hidden space-y-8">
+                            <!-- Club Settings -->
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text text-lg font-semibold">⚙️ Club Settings</span>
+                                </label>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="label-text">Maximum Members</span>
+                                    </label>
+                                    <input type="number" name="maxMembers" placeholder="Enter max members" class="input input-bordered w-full" min="1" />
+                                </div>
+                                
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="label-text">Meeting Frequency</span>
+                                    </label>
+                                    <select name="meetingFrequency" class="select select-bordered w-full">
+                                        <option value="" disabled selected>Choose frequency</option>
+                                        <option value="Daily">Daily</option>
+                                        <option value="Weekly">Weekly</option>
+                                        <option value="Bi-weekly">Bi-weekly</option>
+                                        <option value="Monthly">Monthly</option>
+                                        <option value="As needed">As needed</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text">Meeting Location</span>
+                                </label>
+                                <input type="text" name="meetingLocation" placeholder="Enter meeting location" class="input input-bordered w-full" />
+                            </div>
+
+                            <!-- Additional Information -->
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text text-lg font-semibold">📋 Additional Information</span>
+                                </label>
+                            </div>
+
+                            <div class="flex justify-between gap-8 w-full">
+                                <div class="form-control w-full">
+                                    <label class="label">
+                                        <span class="label-text">Club Goals & Objectives</span>
+                                    </label>
+                                    <textarea name="goals" class="textarea textarea-bordered h-20 w-full" placeholder="What are the main goals and objectives of your club?"></textarea>
+                                </div>
+
+                                <div class="form-control w-full">
+                                    <label class="label">
+                                        <span class="label-text">Requirements for Joining</span>
+                                    </label>
+                                    <textarea name="requirements" class="textarea textarea-bordered h-20 w-full" placeholder="Any specific requirements or criteria for joining the club?"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Terms and Conditions -->
+                            <div class="form-control">
+                                <label class="cursor-pointer label">
+                                    <input type="checkbox" name="terms" class="checkbox checkbox-primary required-field" />
+                                    <span class="label-text">I agree to the terms and conditions *</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Navigation Buttons -->
+                        <div class="flex flex-col sm:flex-row gap-4 justify-between pt-6">
+                            <div class="flex gap-4">
+                                <button type="button" id="prevBtn" class="btn btn-outline btn-error hidden">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                                    </svg>
+                                    Previous
+                                </button>
+                                <button type="button" class="btn btn-outline btn-error" id="cancelBtn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                    Cancel
+                                </button>
+                            </div>
+                            <div>
+                                <button type="button" id="nextBtn" class="btn btn-primary">
+                                    Next
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </button>
+                                <button type="submit" id="submitBtn" class="btn btn-primary hidden">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                                    </svg>
+                                    Create Club
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Screen (Hidden by default) -->
+        <div class="w-[70%] max-w-4xl hidden" id="loadingScreen">
+            <div class="card bg-base-300 shadow-lg animate-pulse">
+                <div class="card-body p-8">
+                    <div class="space-y-6">
+                        <div class="h-8 bg-base-200 rounded w-1/3"></div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="h-12 bg-base-200 rounded"></div>
+                            <div class="h-12 bg-base-200 rounded"></div>
+                        </div>
+                        <div class="h-24 bg-base-200 rounded"></div>
+                        <div class="h-8 bg-base-200 rounded w-1/4"></div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="h-12 bg-base-200 rounded"></div>
+                            <div class="h-12 bg-base-200 rounded"></div>
+                        </div>
+                        <div class="flex justify-end gap-4">
+                            <div class="h-10 bg-base-200 rounded w-20"></div>
+                            <div class="h-10 bg-base-200 rounded w-24"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer sm:footer-horizontal footer-center bg-base-300 text-base-content p-4 mt-8">
+            <aside>
+                <p>Copyright © 2025 - All right reserved by Rhim Angelo Sagales</p>
+            </aside>
+        </footer>
+    </main>
+
+    <script src="../js/create-club-front-end.js"></script>
+    <script src="../js/create-club-send-req.js"></script>
+    
+    <script>
+        window.onload = () => {
+            const defaultTheme = document.querySelector('.default-theme');
+            defaultTheme.click();
+        }
+
+        
+    </script>
+</body>
+</html>

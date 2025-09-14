@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="synthwave">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Rubik+Dirt&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/global-custom.css">
+    <title>Admin Dashboard</title>
+</head>
+<body class="bg-base-200 w-full min-h-screen inter text-base-content">
+    <div class="navbar bg-base-100 shadow-sm px-8 fixed top-0 z-[20]">
+        <div class="navbar-start">
+            <div class="dropdown">
+                <div tabindex="0" role="button" class="btn btn-ghost btn-circle tooltip tooltip-right flex items-center justify-center" data-tip="Navigation">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-accent" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 6h16M4 12h16M4 18h7" />
+                    </svg>
+                </div>
+                <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                    <li><a href="admin-dashboard.html">Dashboard</a></li>
+                    <li><a href="create-club.html">Create Club</a></li>
+                    <li><a href="manage-club.html">Manage Club</a></li>
+                    <li><a href="report-bug.html">Report a bug</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="navbar-center">
+            <a href="admin-dashboard.html" class="btn btn-ghost text-4xl cherry-bomb-one-regular text-primary">ClubHub</a>
+        </div>
+        <div class="navbar-end">
+            <div class="dropdown dropdown-end">
+                <div tabindex="0" role="button" class="btn m-1 btn-circle btn-ghost tooltip tooltip-left flex items-center justify-center hover:bg-base-300"" data-tip="Activity Logs">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
+                        <path
+                            d="M5.85 3.5a.75.75 0 0 0-1.117-1 9.719 9.719 0 0 0-2.348 4.876.75.75 0 0 0 1.479.248A8.219 8.219 0 0 1 5.85 3.5ZM19.267 2.5a.75.75 0 1 0-1.118 1 8.22 8.22 0 0 1 1.987 4.124.75.75 0 0 0 1.48-.248A9.72 9.72 0 0 0 19.266 2.5Z" />
+                        <path fill-rule="evenodd"
+                            d="M12 2.25A6.75 6.75 0 0 0 5.25 9v.75a8.217 8.217 0 0 1-2.119 5.52.75.75 0 0 0 .298 1.206c1.544.57 3.16.99 4.831 1.243a3.75 3.75 0 1 0 7.48 0 24.583 24.583 0 0 0 4.83-1.244.75.75 0 0 0 .298-1.205 8.217 8.217 0 0 1-2.118-5.52V9A6.75 6.75 0 0 0 12 2.25ZM9.75 18c0-.034 0-.067.002-.1a25.05 25.05 0 0 0 4.496 0l.002.1a2.25 2.25 0 1 1-4.5 0Z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-80 p-2 shadow-sm">
+                    <li class="menu-title">Activity Logs</li>
+                    <li><a>Item 1</a></li>
+                    <li><a>Item 2</a></li>
+                </ul>
+            </div>
+            <div class="dropdown dropdown-end tooltip tooltip-left" data-tip="Change theme">
+                <div tabindex="0" role="button" class="btn btn-circle btn-ghost btn-sm hover:bg-base-300">
+                    <div
+                        class="bg-base-100 group-hover:border-base-content/20 border-base-content/10 grid shrink-0 grid-cols-2 gap-0.5 rounded-md border p-1 transition-colors">
+                        <div class="bg-base-content size-1 rounded-full"></div>
+                        <div class="bg-primary size-1 rounded-full"></div>
+                        <div class="bg-secondary size-1 rounded-full"></div>
+                        <div class="bg-accent size-1 rounded-full"></div>
+                    </div>
+                </div>
+                <ul tabindex="0" class="menu dropdown-content bg-base-100 rounded-box z-1 mt-4 w-52 p-2 shadow-sm gap-2">
+                    <li class="menu-title">Theme</li>
+                    <li>
+                        <input type="radio" name="theme-buttons" class="btn btn-xs rounded-full theme-controller join-item default-theme" aria-label="Default" value="default" />
+                    </li>
+                    <li>
+                        <input type="radio" name="theme-buttons" class="btn btn-xs rounded-full theme-controller join-item" aria-label="Night" value="night" />
+                    </li>
+                    <li>
+                        <input type="radio" name="theme-buttons" class="btn btn-xs rounded-full theme-controller join-item" aria-label="Light" value="bumblebee" />
+                    </li>
+                    <li>
+                        <input type="radio" name="theme-buttons" class="btn btn-xs rounded-full theme-controller join-item" aria-label="Lofi" value="lofi" />
+                    </li>
+                    
+                </ul>
+            </div>
+            
+            
+        </div>
+    </div>
+
+    <main class="w-full min-h-screen  flex items-center justify-center flex-col gap-2 pt-16">
+        <h1 class=" w-[70%] text-4xl font-bold text-accent my-6 inline-block">🖥️Dashboard</h1>
+        
+        <div class="w-[70%] flex flex-wrap gap-2 justify-start mb-6 ">
+            <div class="w-[310px] grow h-[150px] bg-base-100 p-4 shadow-md rounded-md hidden real-contents">
+                <div class="w-full h-1/2 flex items-center justify-start">
+                    🟢 Total Active Clubs
+                </div>
+                <div class="w-full h-1/2 flex items-center justify-end text-secondary text-2xl font-bold">
+                    1
+                </div>
+            </div>
+            <div class="w-[310px] grow h-[150px] bg-base-100 p-4 shadow-md rounded-md hidden real-contents">
+                <div class="w-full h-1/2 flex items-center justify-start">
+                    🟡 Total Inactive Clubs
+                </div>
+                <div class="w-full h-1/2 flex items-center justify-end text-secondary text-2xl font-bold">
+                    0
+                </div>
+            </div>
+
+            <div class="w-[310px] grow h-[150px] bg-base-300 p-4 shadow-md rounded-md animate-pulse loading-screen-contents">
+                
+                
+            </div>
+            <div class="w-[310px] grow h-[150px] bg-base-300 p-4 shadow-md rounded-md animate-pulse loading-screen-contents">
+                
+            </div>
+            
+            
+            
+        </div>
+        
+        <div class="w-[70%] items-center justify-between flex">
+            <h2 class=" text-2xl font-semibold">
+                📋Club Overview</h2>
+            
+        </div>
+        <div class="w-full h-[350px] flex items-center justify-center mb-6">
+            <div class=" w-[70%] h-full rounded-md overflow-x-hidden overflow-y-auto relative hidden real-contents bg-base-100 shadow-lg">
+                <table class="table table-zebra bg-base-100 sticky top-0 z-[10]">
+                    <thead class="rounded-none">
+                        <tr class="bg-base-300">
+                          <th class="text-center w-[20%]">Club No.</th>
+                          <th class="text-center w-[20%]">Name</th>
+                          <th class="text-center w-[20%]">Status</th>
+                          <th class="text-center w-[20%]">Club Type</th>
+                          <th class="text-center w-[20%]">Club Owner</th>
+                        </tr>
+                      </thead>
+                </table>
+                <div class="overflow-x-auto relative">
+                    
+                    <table class="table table-zebra">
+                      
+                      <tbody>
+                        <!-- row 1 -->
+                        <tr class="h-16 even:bg-base-200 odd:bg-base-300">
+                          <th class="text-center w-[20%]">1</th>
+                          <td class="text-center w-[20%] cursor-pointer font-bold"><a href="manage-club.html">CES Org</a></td>
+                          <td class="text-center w-[20%] club-status-styling">Closed</td>
+                          <td class="text-center w-[20%]">Academic</td>
+                          <td class="text-center w-[20%]">Crimson Icarro</td>
+                        </tr>
+                        <tr class="h-16 even:bg-base-200 odd:bg-base-300">
+                            <th class="text-center w-[20%]">1</th>
+                            <td class="text-center w-[20%] cursor-pointer font-bold"><a href="manage-club.html">CES Org</a></td>
+                            <td class="text-center w-[20%] club-status-styling">Closed</td>
+                            <td class="text-center w-[20%]">Academic</td>
+                            <td class="text-center w-[20%]">Crimson Icarro</td>
+                          </tr>
+                          <tr class="h-16 even:bg-base-200 odd:bg-base-300">
+                            <th class="text-center w-[20%]">1</th>
+                            <td class="text-center w-[20%] cursor-pointer font-bold"><a href="manage-club.html">CES Org</a></td>
+                            <td class="text-center w-[20%] club-status-styling">Closed</td>
+                            <td class="text-center w-[20%]">Academic</td>
+                            <td class="text-center w-[20%]">Crimson Icarro</td>
+                          </tr>
+                          <tr class="h-16 even:bg-base-200 odd:bg-base-300">
+                            <th class="text-center w-[20%]">1</th>
+                            <td class="text-center w-[20%] cursor-pointer font-bold"><a href="manage-club.html">CES Org</a></td>
+                            <td class="text-center w-[20%] club-status-styling">Closed</td>
+                            <td class="text-center w-[20%]">Academic</td>
+                            <td class="text-center w-[20%]">Crimson Icarro</td>
+                          </tr>
+                        
+
+                        
+
+                        
+                        
+                      </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="w-[70%] h-full rounded-md overflow-x-hidden overflow-y-auto relative loading-screen-contents animate-pulse bg-base-300"></div>
+        </div>
+        <footer class="footer sm:footer-horizontal footer-center bg-base-300 text-base-content p-4">
+            <aside>
+              <p>Copyright © 2025 - All right reserved by Rhim Angelo Sagales</p>
+            </aside>
+        </footer>
+    </main>
+    
+    <script>
+        window.onload = () => {
+            const defaultTheme = document.querySelector('.default-theme');
+            defaultTheme.click()
+
+
+            
+
+            
+
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const clubStatusStyling = document.querySelectorAll('.club-status-styling');
+            clubStatusStyling.forEach(status => {
+                if(status.textContent.trim() == "Active"){
+                    status.classList.remove('text-success');
+                    status.classList.remove('text-warning');
+                    status.classList.remove('text-error');
+                    status.classList.add('text-success');
+                }
+                else if(status.textContent.trim() == "Inactive"){
+                    status.classList.remove('text-success');
+                    status.classList.remove('text-warning');
+                    status.classList.remove('text-error');
+                    status.classList.add('text-warning');
+                }
+                else if(status.textContent.trim() == "Closed"){
+                    status.classList.remove('text-success');
+                    status.classList.remove('text-warning');
+                    status.classList.remove('text-error');
+                    status.classList.add('text-error');
+                }
+            })
+            
+            const loadingScreenContents = document.querySelectorAll('.loading-screen-contents')
+            const realContents = document.querySelectorAll('.real-contents');
+
+            setTimeout(() => {
+                loadingScreenContents.forEach(loadingScreen => {
+                    loadingScreen.classList.replace('animate-pulse', 'hidden')
+                })
+
+                realContents.forEach(contents => {
+                    contents.classList.remove('hidden')
+                })
+            }, 2000)
+        })
+    </script>
+</body>
+</html>

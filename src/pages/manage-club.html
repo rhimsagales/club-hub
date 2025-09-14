@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="synthwave">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Rubik+Dirt&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/global-custom.css">
+    <title>Manage Club - ClubHub</title>
+</head>
+<body class="bg-base-200 w-full min-h-screen inter text-base-content">
+    <dialog id="clubLoginModal" class="modal" open>
+        <div class="modal-box relative z-10">
+            <h3 class="text-2xl font-bold text-primary mb-4">🔒 Enter Club Credentials</h3>
+            <form id="clubLoginForm" class="space-y-4">
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Username</span>
+                    </label>
+                    <input type="text" name="username" id="loginUsername" class="input input-bordered w-full" required />
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">Password</span>
+                    </label>
+                    <div class="relative">
+                        <input type="password" name="clubPassword" id="loginClubPassword" class="input input-bordered w-full pr-12" required />
+                        <button type="button" id="loginTogglePassword" class="absolute right-2 top-2 btn btn-xs btn-ghost" tabindex="-1">
+                            <svg id="loginEyeIcon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-action">
+                    <button type="submit" class="btn btn-primary w-full">Login</button>
+                </div>
+            </form>
+        </div>
+        <div class="fixed inset-0 bg-base-300 bg-opacity-95 z-0"></div>
+    </dialog>
+    <div class="navbar bg-base-100 shadow-sm px-8 fixed top-0 z-[20]">
+        <div class="navbar-start">
+            <div class="dropdown">
+                <div tabindex="0" role="button" class="btn btn-ghost btn-circle tooltip tooltip-right flex items-center justify-center" data-tip="Navigation">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-accent" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 6h16M4 12h16M4 18h7" />
+                    </svg>
+                </div>
+                <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                    <li><a href="admin-dashboard.html">Dashboard</a></li>
+                    <li><a href="create-club.html">Create Club</a></li>
+                    <li><a class="active">Manage Club</a></li>
+                    <li><a href="report-bug.html">Report a bug</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="navbar-center">
+            <a href="admin-dashboard.html" class="btn btn-ghost text-4xl cherry-bomb-one-regular text-primary">ClubHub</a>
+        </div>
+        <div class="navbar-end">
+            <div class="dropdown dropdown-end">
+                <div tabindex="0" role="button" class="btn m-1 btn-circle btn-ghost tooltip tooltip-left flex items-center justify-center hover:bg-base-300" data-tip="Activity Logs">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
+                        <path
+                            d="M5.85 3.5a.75.75 0 0 0-1.117-1 9.719 9.719 0 0 0-2.348 4.876.75.75 0 0 0 1.479.248A8.219 8.219 0 0 1 5.85 3.5ZM19.267 2.5a.75.75 0 1 0-1.118 1 8.22 8.22 0 0 1 1.987 4.124.75.75 0 0 0 1.48-.248A9.72 9.72 0 0 0 19.266 2.5Z" />
+                        <path fill-rule="evenodd"
+                            d="M12 2.25A6.75 6.75 0 0 0 5.25 9v.75a8.217 8.217 0 0 1-2.119 5.52.75.75 0 0 0 .298 1.206c1.544.57 3.16.99 4.831 1.243a3.75 3.75 0 1 0 7.48 0 24.583 24.583 0 0 0 4.83-1.244.75.75 0 0 0 .298-1.205 8.217 8.217 0 0 1-2.118-5.52V9A6.75 6.75 0 0 0 12 2.25ZM9.75 18c0-.034 0-.067.002-.1a25.05 25.05 0 0 0 4.496 0l.002.1a2.25 2.25 0 1 1-4.5 0Z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-80 p-2 shadow-sm">
+                    <li class="menu-title">Activity Logs</li>
+                    <li><a>Item 1</a></li>
+                    <li><a>Item 2</a></li>
+                </ul>
+            </div>
+            <div class="dropdown dropdown-end tooltip tooltip-left" data-tip="Change theme">
+                <div tabindex="0" role="button" class="btn btn-circle btn-ghost btn-sm hover:bg-base-300">
+                    <div
+                        class="bg-base-100 group-hover:border-base-content/20 border-base-content/10 grid shrink-0 grid-cols-2 gap-0.5 rounded-md border p-1 transition-colors">
+                        <div class="bg-base-content size-1 rounded-full"></div>
+                        <div class="bg-primary size-1 rounded-full"></div>
+                        <div class="bg-secondary size-1 rounded-full"></div>
+                        <div class="bg-accent size-1 rounded-full"></div>
+                    </div>
+                </div>
+                <ul tabindex="0" class="menu dropdown-content bg-base-100 rounded-box z-1 mt-4 w-52 p-2 shadow-sm gap-2">
+                    <li class="menu-title">Theme</li>
+                    <li>
+                        <input type="radio" name="theme-buttons" class="btn btn-xs rounded-full theme-controller join-item default-theme" aria-label="Default" value="default" />
+                    </li>
+                    <li>
+                        <input type="radio" name="theme-buttons" class="btn btn-xs rounded-full theme-controller join-item" aria-label="Night" value="night" />
+                    </li>
+                    <li>
+                        <input type="radio" name="theme-buttons" class="btn btn-xs rounded-full theme-controller join-item" aria-label="Light" value="bumblebee" />
+                    </li>
+                    <li>
+                        <input type="radio" name="theme-buttons" class="btn btn-xs rounded-full theme-controller join-item" aria-label="Lofi" value="lofi" />
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <main class="w-full min-h-screen flex items-center justify-center flex-col gap-2 pt-16">
+        <h1 class="w-[70%] text-4xl font-bold text-accent my-6 inline-block">⚙️ Manage Club</h1>
+        
+        <!-- Control Panel -->
+        <div class="w-[70%] max-w-7xl mb-1">
+            <div class="card rounded-md bg-base-100 p-4 shadow-md">
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <!-- New layout: left, center, right -->
+                    <div class="w-full flex flex-row flex-wrap items-center justify-between gap-6">
+                        <!-- Left: Additional Info & Contact Info -->
+                        <div class="flex flex-row items-center gap-3">
+                            <button class="btn btn-outline btn-info btn-xs rounded-full mr-2" onclick="additionalInfoModal.showModal()">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Additional Info
+                            </button>
+                            <button class="btn btn-outline btn-warning btn-xs rounded-full" onclick="contactInfoModal.showModal()">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                                Contact Info
+                            </button>
+                        </div>
+                        <!-- Center: Member Recruit & Status -->
+                        <div class="flex flex-row items-center gap-4">
+                            <span class="text-sm font-medium">Member Recruit</span>
+                            <input type="checkbox" class="toggle toggle-primary" checked />
+                            <span class="text-sm font-medium">Status</span>
+                            <input type="checkbox" class="toggle toggle-success" id="clubStatusToggle" checked />
+                            <span id="clubStatusLabel" class="text-xs font-semibold text-success">Active</span>
+                        </div>
+                        <!-- Right: Delete Club & Share Dashboard -->
+                        <div class="flex flex-row items-center gap-3">
+                            <button class="btn btn-error btn-xs rounded-full mr-2" onclick="deleteClub()">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                                Delete Club
+                            </button>
+                            <button class="btn btn-primary btn-xs rounded-full" onclick="shareDashboardModal.showModal()">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                                </svg>
+                                Share Dashboard
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bento Grid Container -->
+        <div class="w-[70%] max-w-7xl">
+            <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-6 auto-rows-fr">
+                
+                <!-- 1. Club Name (2x1) - Medium horizontal -->
+                <div class="md:col-span-2 lg:col-span-2 bg-base-100 p-6 shadow-md rounded-md flex flex-col max-h-80 overflow-auto">
+                    <!-- Club name -->
+                    <h2 class="text-2xl font-bold text-primary mb-2">🎓 Computer Science Society</h2>
+                    
+                    <!-- Club type -->
+                    <p class="text-sm text-base-content/70 mb-4">Academic Club</p>
+                    
+                    <!-- Phone number -->
+                    <div class="flex items-center gap-1 text-sm text-base-content/60 mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                        </svg>
+                        <span>+1 (555) 123-4567</span>
+                    </div>
+                    
+                    <!-- Social media -->
+                    <div class="flex items-center gap-1 text-sm text-base-content/60 mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                        </svg>
+                        <span>@cssociety</span>
+                    </div>
+                    
+                    <!-- Maximum members -->
+                    <div class="flex items-center gap-1 text-sm text-base-content/60 mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                        <span>Max 50 members</span>
+                    </div>
+                    
+                    <!-- Meeting location -->
+                    <div class="flex items-center gap-1 text-sm text-base-content/60 mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                        <span>Room 201, CS Building</span>
+                    </div>
+                    
+                    <!-- Bottom row: Status on left, Action buttons on right -->
+                    <div class="flex justify-between items-center mt-auto">
+                        <div class="badge badge-success badge-lg text-xs font-semibold">Active</div>
+                        <div class="flex gap-2">
+                            <button class="btn btn-sm btn-outline btn-primary" onclick="editClubModal.showModal()">Edit</button>
+                            <button class="btn btn-sm btn-outline btn-secondary" onclick="settingsModal.showModal()">Settings</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 2. AI Tasks (2x1) - Medium horizontal -->
+                <div class="md:col-span-2 lg:col-span-2 bg-base-100 p-6 shadow-md rounded-md max-h-80 overflow-hidden">
+                    
+                    <div class="flex items-center justify-between mb-4 h-[10%]">
+                        <h3 class="inline-block text-nowrap text-lg font-semibold flex items-center gap-2">
+                            🤖 AI Generated Tasks
+                        </h3>
+                        <div class="w-full flex justify-end">
+                            <button class="btn-outline btn btn-xs tooltip tooltip-left btn-neutral" data-tip="Generate Task">✨</button>
+                        </div>
+                    </div>
+                    <div class="space-y-3 h-[85%] overflow-auto">
+                        <div class="flex items-center gap-3 p-3 bg-base-200 rounded-lg hover:bg-base-300 transition-colors">
+                            <div class="w-2 h-2 bg-primary rounded-full"></div>
+                            <span class="text-sm flex-1">Organize monthly member networking event</span>
+                            
+                        </div>
+                        <div class="flex items-center gap-3 p-3 bg-base-200 rounded-lg hover:bg-base-300 transition-colors">
+                            <div class="w-2 h-2 bg-secondary rounded-full"></div>
+                            <span class="text-sm flex-1">Create skill development workshop series</span>
+                            
+                        </div>
+                        <div class="flex items-center gap-3 p-3 bg-base-200 rounded-lg hover:bg-base-300 transition-colors">
+                            <div class="w-2 h-2 bg-accent rounded-full"></div>
+                            <span class="text-sm flex-1">Set up mentorship program for new members</span>
+                        
+                        </div>
+                        <div class="flex items-center gap-3 p-3 bg-base-200 rounded-lg hover:bg-base-300 transition-colors">
+                            <div class="w-2 h-2 bg-success rounded-full"></div>
+                            <span class="text-sm flex-1">Plan community outreach project</span>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 3. Members (2x2) - Large square -->
+                <div class="md:col-span-2 lg:col-span-2 bg-base-100 p-6 shadow-md rounded-md max-h-80 overflow-hidden">
+                    <div class="flex items-center justify-between mb-4 h-[10%]">
+                        <h3 class="text-lg font-semibold">👥 Members (24)</h3>
+                        <button class="btn btn-xs btn-primary btn-xs " onclick="applicantsModal.showModal()">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            Add
+                        </button>
+                    </div>
+                    <div class="space-y-3 h-[85%] overflow-y-auto">
+                        <div class="flex items-center gap-3 p-2 hover:bg-base-200 rounded-lg">
+                            <div class="avatar w-8 h-8 rounded-full bg-primary text-primary-content flex items-center justify-center text-xs font-bold">AI</div>
+                            <div class="flex-1">
+                                <p class="font-medium text-sm">Alex Johnson</p>
+                                <p class="text-xs text-base-content/70">President</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 hover:bg-base-200 rounded-lg">
+                            <div class="avatar w-8 h-8 rounded-full bg-secondary text-secondary-content flex items-center justify-center text-xs font-bold">SM</div>
+                            <div class="flex-1">
+                                <p class="font-medium text-sm">Sarah Miller</p>
+                                <p class="text-xs text-base-content/70">Vice President</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 hover:bg-base-200 rounded-lg">
+                            <div class="avatar w-8 h-8 rounded-full bg-accent text-accent-content flex items-center justify-center text-xs font-bold">MJ</div>
+                            <div class="flex-1">
+                                <p class="font-medium text-sm">Mike Chen</p>
+                                <p class="text-xs text-base-content/70">Treasurer</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3 p-2 hover:bg-base-200 rounded-lg">
+                            <div class="avatar w-8 h-8 rounded-full bg-neutral text-neutral-content flex items-center justify-center text-xs font-bold">EW</div>
+                            <div class="flex-1">
+                                <p class="font-medium text-sm">Emma Wilson</p>
+                                <p class="text-xs text-base-content/70">Member</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 4. Description (2x1) - Medium horizontal -->
+                <div class="md:col-span-2 lg:col-span-2 bg-base-100 p-6 shadow-md rounded-md max-h-80 overflow-hidden">
+                    <h3 class="text-lg font-semibold mb-3 inline-block h-[10%]">📝 Club Description</h3>
+                    <div class="w-full h-[70%] overflow-auto">
+                        <p class="text-sm text-base-content/80 leading-relaxed">
+                            The Computer Science Society is dedicated to fostering innovation and collaboration among students passionate about technology. We organize coding workshops, hackathons, and networking events to help members develop their technical skills and build meaningful connections in the tech industry.
+    
+                            The Computer Science Society is dedicated to fostering innovation and collaboration among students passionate about technology. We organize coding workshops, hackathons, and networking events to help members develop their technical skills and build meaningful connections in the tech industry.
+                        </p>
+                    </div>
+                    <button class="btn btn-sm btn-outline btn-primary mt-3 inline-block h-[10%]" onclick="editDescriptionModal.showModal()">Edit Description</button>
+                </div>
+                
+                <!-- 5. Owner (1x1) - Small square -->
+                <div class="md:col-span-1 lg:col-span-1 bg-base-100 py-6 px-2 shadow-md rounded-md max-h-80 overflow-auto flex flex-col items-center justify-center">
+                    <h3 class="text-lg font-semibold mb-3 text-nowrap">👤 Club Owner</h3>
+                    <div class="text-centern flex items-center justify-center flex-col">
+                        <div class="avatar mb-3 w-16 h-16 rounded-full bg-primary text-primary-content flex items-center justify-center text-xl font-bold">AJ</div>
+                        <p class="font-medium text-sm">Alex Johnson</p>
+                        <p class="text-xs text-base-content/70">alex.j@email.com</p>
+                    </div>
+                </div>
+                
+                <!-- 6. Events (3x1) - Wide horizontal -->
+                <div class="md:col-span-4 lg:col-span-3 bg-base-100 p-6 shadow-md rounded-md max-h-80 overflow-hidden">
+                    <div class="flex items-center justify-between mb-4 h-[10%]">
+                        <h3 class="text-lg font-semibold">📅 Upcoming Events</h3>
+                        <button class="btn btn-xs btn-primary" onclick="createEventModal.showModal()">Create Event</button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 overflow-auto h-[85%]">
+                        <div class="p-4 bg-base-200 rounded-lg">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-3 h-3 bg-primary rounded-full"></div>
+                                <span class="text-sm font-medium">Weekly Workshop</span>
+                            </div>
+                            <p class="text-xs text-base-content/70">Tomorrow, 2:00 PM</p>
+                            <p class="text-xs mt-1">Introduction to React</p>
+                        </div>
+                        <div class="p-4 bg-base-200 rounded-lg">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-3 h-3 bg-secondary rounded-full"></div>
+                                <span class="text-sm font-medium">Hackathon</span>
+                            </div>
+                            <p class="text-xs text-base-content/70">Next Friday, 9:00 AM</p>
+                            <p class="text-xs mt-1">24-hour coding competition</p>
+                        </div>
+                        <div class="p-4 bg-base-200 rounded-lg">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-3 h-3 bg-accent rounded-full"></div>
+                                <span class="text-sm font-medium">Networking</span>
+                            </div>
+                            <p class="text-xs text-base-content/70">Next Month</p>
+                            <p class="text-xs mt-1">Industry meet & greet</p>
+                        </div>
+                        <div class="p-4 bg-base-200 rounded-lg">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-3 h-3 bg-accent rounded-full"></div>
+                                <span class="text-sm font-medium">Networking</span>
+                            </div>
+                            <p class="text-xs text-base-content/70">Next Month</p>
+                            <p class="text-xs mt-1">Industry meet & greet</p>
+                        </div>
+                        <div class="p-4 bg-base-200 rounded-lg">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-3 h-3 bg-accent rounded-full"></div>
+                                <span class="text-sm font-medium">Networking</span>
+                            </div>
+                            <p class="text-xs text-base-content/70">Next Month</p>
+                            <p class="text-xs mt-1">Industry meet & greet</p>
+                        </div>
+                        <div class="p-4 bg-base-200 rounded-lg">
+                            <div class="flex items-center gap-2 mb-2">
+                                <div class="w-3 h-3 bg-accent rounded-full"></div>
+                                <span class="text-sm font-medium">Networking</span>
+                            </div>
+                            <p class="text-xs text-base-content/70">Next Month</p>
+                            <p class="text-xs mt-1">Industry meet & greet</p>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+        <!-- Edit Club Modal -->
+        <dialog id="editClubModal" class="modal">
+            <div class="modal-box w-[60%] max-w-none">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-bold text-primary">✏️ Edit Club Information</h3>
+                    <button class="btn btn-sm btn-circle btn-ghost" onclick="editClubModal.close()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <form class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-semibold">Club Name *</span>
+                            </label>
+                            <input type="text" value="Computer Science Society" class="input input-bordered w-full" required />
+                        </div>
+                        
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-semibold">Club Type *</span>
+                            </label>
+                            <select class="select select-bordered w-full" required>
+                                <option value="Academic" selected>Academic</option>
+                                <option value="Sports">Sports</option>
+                                <option value="Cultural">Cultural</option>
+                                <option value="Social">Social</option>
+                                <option value="Professional">Professional</option>
+                                <option value="Religious">Religious</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-semibold">Club Number *</span>
+                            </label>
+                            <input type="text" value="CS-2024-001" class="input input-bordered w-full" required />
+                        </div>
+                        
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-semibold">Club Email *</span>
+                            </label>
+                            <input type="email" value="cssociety@university.edu" class="input input-bordered w-full" required />
+                        </div>
+                    </div>
+
+                    <div class="modal-action">
+                        <button type="button" class="btn btn-outline btn-error" onclick="editClubModal.close()">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-backdrop" onclick="editClubModal.close()"></div>
+        </dialog>
+
+        <!-- Settings Modal -->
+        <dialog id="settingsModal" class="modal">
+            <div class="modal-box w-[60%] max-w-none">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-bold text-secondary">⚙️ Club Settings</h3>
+                    <button class="btn btn-sm btn-circle btn-ghost" onclick="settingsModal.close()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <form class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-semibold">Maximum Members *</span>
+                            </label>
+                            <input type="number" value="50" min="1" class="input input-bordered w-full" required />
+                        </div>
+                        
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-semibold">Meeting Location *</span>
+                            </label>
+                            <input type="text" value="Room 201, CS Building" class="input input-bordered w-full" required />
+                        </div>
+                    </div>
+
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-semibold">Meeting Frequency</span>
+                        </label>
+                        <select class="select select-bordered w-full">
+                            <option value="Weekly" selected>Weekly</option>
+                            <option value="Daily">Daily</option>
+                            <option value="Bi-weekly">Bi-weekly</option>
+                            <option value="Monthly">Monthly</option>
+                            <option value="As needed">As needed</option>
+                        </select>
+                    </div>
+
+                    <div class="modal-action">
+                        <button type="button" class="btn btn-outline btn-error" onclick="settingsModal.close()">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-secondary">
+                            Save Settings
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-backdrop" onclick="settingsModal.close()"></div>
+        </dialog>
+
+        <!-- Edit Description Modal -->
+        <dialog id="editDescriptionModal" class="modal">
+            <div class="modal-box w-[60%] max-w-none">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-bold text-accent">📝 Edit Club Description</h3>
+                    <button class="btn btn-sm btn-circle btn-ghost" onclick="editDescriptionModal.close()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <form class="space-y-6">
+                    <div class="form-control flex flex-col">
+                        <label class="label">
+                            <span class="label-text font-semibold">Club Description *</span>
+                        </label>
+                        <textarea class="textarea textarea-bordered h-48 w-full" placeholder="Describe your club's purpose and activities..." required>The Computer Science Society is dedicated to fostering innovation and collaboration among students passionate about technology. We organize coding workshops, hackathons, and networking events to help members develop their technical skills and build meaningful connections in the tech industry.</textarea>
+                    </div>
+
+                    <div class="modal-action">
+                        <button type="button" class="btn btn-outline btn-error" onclick="editDescriptionModal.close()">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-accent">
+                            Save Description
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-backdrop" onclick="editDescriptionModal.close()"></div>
+        </dialog>
+
+        <!-- Create Event Modal -->
+        <dialog id="createEventModal" class="modal">
+            <div class="modal-box w-[60%] max-w-none">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-bold text-success">📅 Create New Event</h3>
+                    <button class="btn btn-sm btn-circle btn-ghost" onclick="createEventModal.close()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <form class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-semibold">Event Name *</span>
+                            </label>
+                            <input type="text" placeholder="Enter event name" class="input input-bordered w-full" required />
+                        </div>
+                        
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-semibold">Event Type *</span>
+                            </label>
+                            <select class="select select-bordered w-full" required>
+                                <option disabled selected>Choose event type</option>
+                                <option value="Workshop">Workshop</option>
+                                <option value="Meeting">Meeting</option>
+                                <option value="Social">Social</option>
+                                <option value="Competition">Competition</option>
+                                <option value="Networking">Networking</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-semibold">Event Date *</span>
+                            </label>
+                            <input type="date" class="input input-bordered w-full" required />
+                        </div>
+                        
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-semibold">Event Time *</span>
+                            </label>
+                            <input type="time" class="input input-bordered w-full" required />
+                        </div>
+                    </div>
+
+                    <div class="modal-action">
+                        <button type="button" class="btn btn-outline btn-error" onclick="createEventModal.close()">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-success">
+                            Create Event
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-backdrop" onclick="createEventModal.close()"></div>
+        </dialog>
+
+        <!-- Additional Info Modal -->
+        <dialog id="additionalInfoModal" class="modal">
+            <div class="modal-box w-[60%] max-w-none">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-bold text-info">ℹ️ Additional Information</h3>
+                    <button class="btn btn-sm btn-circle btn-ghost" onclick="additionalInfoModal.close()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <form class="space-y-6">
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-semibold">Club Goals & Objectives</span>
+                        </label>
+                        <textarea class="textarea textarea-bordered h-32" placeholder="What are the main goals and objectives of your club?"></textarea>
+                    </div>
+
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-semibold">Requirements for Joining</span>
+                        </label>
+                        <textarea class="textarea textarea-bordered h-32" placeholder="Any specific requirements or criteria for joining the club?"></textarea>
+                    </div>
+
+                    <div class="modal-action">
+                        <button type="button" class="btn btn-outline btn-error" onclick="additionalInfoModal.close()">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-info">
+                            Save Information
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-backdrop" onclick="additionalInfoModal.close()"></div>
+        </dialog>
+
+        <!-- Contact Info Modal -->
+        <dialog id="contactInfoModal" class="modal">
+            <div class="modal-box w-[60%] max-w-none">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-bold text-warning">📞 Contact Information</h3>
+                    <button class="btn btn-sm btn-circle btn-ghost" onclick="contactInfoModal.close()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <form class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-semibold">Phone Number</span>
+                            </label>
+                            <input type="tel" value="+1 (555) 123-4567" class="input input-bordered w-full" />
+                        </div>
+                        
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text font-semibold">Email Address</span>
+                            </label>
+                            <input type="email" value="cssociety@university.edu" class="input input-bordered w-full" />
+                        </div>
+                    </div>
+
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-semibold">Social Media Link</span>
+                        </label>
+                        <input type="url" value="@cssociety" class="input input-bordered w-full" />
+                    </div>
+
+                    <div class="modal-action">
+                        <button type="button" class="btn btn-outline btn-error" onclick="contactInfoModal.close()">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-warning">
+                            Save Contact Info
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-backdrop" onclick="contactInfoModal.close()"></div>
+        </dialog>
+
+        <!-- Applicants Modal -->
+        <dialog id="applicantsModal" class="modal">
+            <div class="modal-box w-[70%] max-w-none">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-bold text-primary">👥 Member Applicants</h3>
+                    <button class="btn btn-sm btn-circle btn-ghost" onclick="applicantsModal.close()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="space-y-4 max-h-96 overflow-y-auto">
+                    <!-- Applicant 1 -->
+                    <div class="card bg-base-200 p-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <div class="avatar w-12 h-12 rounded-full bg-primary text-primary-content flex items-center justify-center text-sm font-bold">
+                                    JD
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold">John Doe</h4>
+                                    <p class="text-sm text-base-content/70">john.doe@email.com</p>
+                                    <p class="text-xs text-base-content/60">Applied 2 days ago</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="btn btn-sm btn-success btn-outline">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    Accept
+                                </button>
+                                <button class="btn btn-sm btn-error btn-outline">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                    Reject
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Applicant 2 -->
+                    <div class="card bg-base-200 p-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <div class="avatar w-12 h-12 rounded-full bg-secondary text-secondary-content flex items-center justify-center text-sm font-bold">
+                                    JS
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold">Jane Smith</h4>
+                                    <p class="text-sm text-base-content/70">jane.smith@email.com</p>
+                                    <p class="text-xs text-base-content/60">Applied 1 day ago</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="btn btn-sm btn-success btn-outline">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    Accept
+                                </button>
+                                <button class="btn btn-sm btn-error btn-outline">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                    Reject
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Applicant 3 -->
+                    <div class="card bg-base-200 p-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <div class="avatar w-12 h-12 rounded-full bg-accent text-accent-content flex items-center justify-center text-sm font-bold">
+                                    RB
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold">Robert Brown</h4>
+                                    <p class="text-sm text-base-content/70">robert.brown@email.com</p>
+                                    <p class="text-xs text-base-content/60">Applied 3 days ago</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="btn btn-sm btn-success btn-outline">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    Accept
+                                </button>
+                                <button class="btn btn-sm btn-error btn-outline">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                    Reject
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Applicant 4 -->
+                    <div class="card bg-base-200 p-4">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <div class="avatar w-12 h-12 rounded-full bg-neutral text-neutral-content flex items-center justify-center text-sm font-bold">
+                                    LW
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold">Lisa Wilson</h4>
+                                    <p class="text-sm text-base-content/70">lisa.wilson@email.com</p>
+                                    <p class="text-xs text-base-content/60">Applied 5 days ago</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="btn btn-sm btn-success btn-outline">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    Accept
+                                </button>
+                                <button class="btn btn-sm btn-error btn-outline">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                    Reject
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-action">
+                    <button type="button" class="btn btn-outline btn-error" onclick="applicantsModal.close()">
+                        Close
+                    </button>
+                </div>
+            </div>
+            <div class="modal-backdrop" onclick="applicantsModal.close()"></div>
+        </dialog>
+
+        <!-- Share Dashboard Modal -->
+        <dialog id="shareDashboardModal" class="modal">
+            <div class="modal-box w-[50%] max-w-2xl">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-bold text-primary">🔗 Share Dashboard</h3>
+                    <button class="btn btn-sm btn-circle btn-ghost" onclick="shareDashboardModal.close()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="alert alert-info">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Share this exclusive dashboard link with your club members. They'll have access to view club information and events.</span>
+                    </div>
+                    
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text font-semibold">Dashboard Link</span>
+                        </label>
+                        <div class="flex gap-2">
+                            <input type="text" id="dashboardLink" class="input input-bordered flex-1" value="https://clubhub.com/dashboard/tech-innovators-club/abc123xyz" readonly />
+                            <button class="btn btn-primary" onclick="copyDashboardLink()">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                </svg>
+                                Copy
+                            </button>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <div class="modal-action">
+                    <button type="button" class="btn btn-outline btn-error" onclick="shareDashboardModal.close()">
+                        Close
+                    </button>
+                </div>
+            </div>
+            <div class="modal-backdrop" onclick="shareDashboardModal.close()"></div>
+        </dialog>
+
+        <footer class="footer sm:footer-horizontal footer-center bg-base-300 text-base-content p-4 mt-8">
+            <aside>
+                <p>Copyright © 2025 - All right reserved by Rhim Angelo Sagales</p>
+            </aside>
+        </footer>
+    </main>
+    
+    <script>
+        // Delete club button logic
+        function deleteClub() {
+            if (confirm('Are you sure you want to delete this club? This action cannot be undone.')) {
+                // Add your delete logic here (e.g., API call)
+                alert('Club deleted successfully!');
+            }
+        }
+
+        // Status switch logic
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusToggle = document.getElementById('clubStatusToggle');
+            const statusLabel = document.getElementById('clubStatusLabel');
+            if (statusToggle && statusLabel) {
+                statusToggle.addEventListener('change', function() {
+                    if (statusToggle.checked) {
+                        statusLabel.textContent = 'Active';
+                        statusLabel.classList.remove('text-error');
+                        statusLabel.classList.add('text-success');
+                    } else {
+                        statusLabel.textContent = 'Inactive';
+                        statusLabel.classList.remove('text-success');
+                        statusLabel.classList.add('text-error');
+                    }
+                });
+            }
+        });
+        // Show/hide password for create club form
+        document.addEventListener('DOMContentLoaded', () => {
+            const passwordInput = document.getElementById('clubPassword');
+            const togglePasswordBtn = document.getElementById('togglePassword');
+            const eyeIcon = document.getElementById('eyeIcon');
+            if (togglePasswordBtn && passwordInput && eyeIcon) {
+                togglePasswordBtn.addEventListener('click', () => {
+                    if (passwordInput.type === 'password') {
+                        passwordInput.type = 'text';
+                        eyeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.978 9.978 0 012.042-3.362M6.634 6.634A9.956 9.956 0 0112 5c4.477 0 8.268 2.943 9.542 7a9.978 9.978 0 01-4.421 5.818M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" />`;
+                    } else {
+                        passwordInput.type = 'password';
+                        eyeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />`;
+                    }
+                });
+            }
+        });
+        // Show/hide password for manage club login modal
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginPasswordInput = document.getElementById('loginClubPassword');
+            const loginTogglePasswordBtn = document.getElementById('loginTogglePassword');
+            const loginEyeIcon = document.getElementById('loginEyeIcon');
+            if (loginTogglePasswordBtn && loginPasswordInput && loginEyeIcon) {
+                loginTogglePasswordBtn.addEventListener('click', () => {
+                    if (loginPasswordInput.type === 'password') {
+                        loginPasswordInput.type = 'text';
+                        loginEyeIcon.innerHTML = `<path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M13.875 18.825A10.05 10.05 0 0112 19c-4.477 0-8.268-2.943-9.542-7a9.978 9.978 0 012.042-3.362M6.634 6.634A9.956 9.956 0 0112 5c4.477 0 8.268 2.943 9.542 7a9.978 9.978 0 01-4.421 5.818M15 12a3 3 0 11-6 0 3 3 0 016 0z\" /><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M3 3l18 18\" />`;
+                    } else {
+                        loginPasswordInput.type = 'password';
+                        loginEyeIcon.innerHTML = `<path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M15 12a3 3 0 11-6 0 3 3 0 016 0z\" /><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z\" />`;
+                    }
+                });
+            }
+        });
+        // Club login modal logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const clubLoginModal = document.getElementById('clubLoginModal');
+            const clubLoginForm = document.getElementById('clubLoginForm');
+            if (clubLoginModal && clubLoginForm) {
+                clubLoginForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    // Here you would check credentials against your backend or Firebase
+                    // For now, just close the modal
+                    clubLoginModal.close();
+                });
+            }
+        });
+        window.onload = () => {
+            const defaultTheme = document.querySelector('.default-theme');
+            defaultTheme.click();
+        }
+
+        // Copy dashboard link function
+        function copyDashboardLink() {
+            const linkInput = document.getElementById('dashboardLink');
+            linkInput.select();
+            linkInput.setSelectionRange(0, 99999); // For mobile devices
+            
+            try {
+                document.execCommand('copy');
+                // Show success feedback
+                const copyBtn = event.target.closest('button');
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    Copied!
+                `;
+                copyBtn.classList.add('btn-success');
+                copyBtn.classList.remove('btn-primary');
+                
+                // Reset button after 2 seconds
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                    copyBtn.classList.remove('btn-success');
+                    copyBtn.classList.add('btn-primary');
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy: ', err);
+                alert('Failed to copy link. Please try again.');
+            }
+        }
+    </script>
+</body>
+</html>

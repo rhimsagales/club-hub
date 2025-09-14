@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="synthwave">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Rubik+Dirt&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/global-custom.css">
+    <style>
+        .input-error {
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2) !important;
+        }
+    </style>
+    <title>Report a Bug - ClubHub</title>
+</head>
+<body class="bg-base-200 w-full min-h-screen inter text-base-content">
+    <div class="navbar bg-base-100 shadow-sm px-8 fixed top-0 z-[20]">
+        <div class="navbar-start">
+            <div class="dropdown">
+                <div tabindex="0" role="button" class="btn btn-ghost btn-circle tooltip tooltip-right flex items-center justify-center" data-tip="Navigation">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-accent" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 6h16M4 12h16M4 18h7" />
+                    </svg>
+                </div>
+                <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                    <li><a href="admin-dashboard.html">Dashboard</a></li>
+                    <li><a href="create-club.html">Create Club</a></li>
+                    <li><a href="manage-club.html">Manage Club</a></li>
+                    <li><a class="active">Report a bug</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="navbar-center">
+            <a href="admin-dashboard.html" class="btn btn-ghost text-4xl cherry-bomb-one-regular text-primary">ClubHub</a>
+        </div>
+        <div class="navbar-end">
+            <div class="dropdown dropdown-end">
+                <div tabindex="0" role="button" class="btn m-1 btn-circle btn-ghost tooltip tooltip-left flex items-center justify-center hover:bg-base-300" data-tip="Activity Logs">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
+                        <path
+                            d="M5.85 3.5a.75.75 0 0 0-1.117-1 9.719 9.719 0 0 0-2.348 4.876.75.75 0 0 0 1.479.248A8.219 8.219 0 0 1 5.85 3.5ZM19.267 2.5a.75.75 0 1 0-1.118 1 8.22 8.22 0 0 1 1.987 4.124.75.75 0 0 0 1.48-.248A9.72 9.72 0 0 0 19.266 2.5Z" />
+                        <path fill-rule="evenodd"
+                            d="M12 2.25A6.75 6.75 0 0 0 5.25 9v.75a8.217 8.217 0 0 1-2.119 5.52.75.75 0 0 0 .298 1.206c1.544.57 3.16.99 4.831 1.243a3.75 3.75 0 1 0 7.48 0 24.583 24.583 0 0 0 4.83-1.244.75.75 0 0 0 .298-1.205 8.217 8.217 0 0 1-2.118-5.52V9A6.75 6.75 0 0 0 12 2.25ZM9.75 18c0-.034 0-.067.002-.1a25.05 25.05 0 0 0 4.496 0l.002.1a2.25 2.25 0 1 1-4.5 0Z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-80 p-2 shadow-sm">
+                    <li class="menu-title">Activity Logs</li>
+                    <li><a>Item 1</a></li>
+                    <li><a>Item 2</a></li>
+                </ul>
+            </div>
+            <div class="dropdown dropdown-end tooltip tooltip-left" data-tip="Change theme">
+                <div tabindex="0" role="button" class="btn btn-circle btn-ghost btn-sm hover:bg-base-300">
+                    <div
+                        class="bg-base-100 group-hover:border-base-content/20 border-base-content/10 grid shrink-0 grid-cols-2 gap-0.5 rounded-md border p-1 transition-colors">
+                        <div class="bg-base-content size-1 rounded-full"></div>
+                        <div class="bg-primary size-1 rounded-full"></div>
+                        <div class="bg-secondary size-1 rounded-full"></div>
+                        <div class="bg-accent size-1 rounded-full"></div>
+                    </div>
+                </div>
+                <ul tabindex="0" class="menu dropdown-content bg-base-100 rounded-box z-1 mt-4 w-52 p-2 shadow-sm gap-2">
+                    <li class="menu-title">Theme</li>
+                    <li>
+                        <input type="radio" name="theme-buttons" class="btn btn-xs rounded-full theme-controller join-item default-theme" aria-label="Default" value="default" />
+                    </li>
+                    <li>
+                        <input type="radio" name="theme-buttons" class="btn btn-xs rounded-full theme-controller join-item" aria-label="Night" value="night" />
+                    </li>
+                    <li>
+                        <input type="radio" name="theme-buttons" class="btn btn-xs rounded-full theme-controller join-item" aria-label="Light" value="bumblebee" />
+                    </li>
+                    <li>
+                        <input type="radio" name="theme-buttons" class="btn btn-xs rounded-full theme-controller join-item" aria-label="Lofi" value="lofi" />
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <main class="w-full min-h-screen flex items-center justify-center flex-col gap-2 pt-16">
+        <h1 class="w-[70%] text-4xl font-bold text-accent my-6 inline-block">🐛 Report a Bug</h1>
+        <!-- Bug Report Form Container -->
+        <div class="w-[70%] max-w-4xl">
+            <div class="card bg-base-100 shadow-lg">
+                <div class="card-body p-8">
+                    <!-- Progress Indicator -->
+                    <div class="w-full mb-8">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4">
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 rounded-full bg-primary text-primary-content flex items-center justify-center text-sm font-bold" id="step1-indicator">1</div>
+                                    <span class="ml-2 text-sm font-medium" id="step1-text">Bug Details</span>
+                                </div>
+                                <div class="w-16 h-0.5 bg-base-300" id="progress-line"></div>
+                                <div class="flex items-center">
+                                    <div class="w-8 h-8 rounded-full bg-base-300 text-base-content flex items-center justify-center text-sm font-bold" id="step2-indicator">2</div>
+                                    <span class="ml-2 text-sm font-medium text-base-content/70" id="step2-text">Additional Info</span>
+                                </div>
+                            </div>
+                            <div class="text-sm text-base-content/70">
+                                <span id="current-step">Step 1 of 2</span>
+                            </div>
+                        </div>
+                    </div>
+                    <form class="space-y-8" id="bugReportForm">
+                        <!-- Page 1: Bug Details -->
+                        <div id="page1" class="form-page space-y-8">
+                            <div class="alert alert-info mb-6">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span>Help us improve ClubHub by reporting any bugs or issues you encounter. Your feedback is valuable to us!</span>
+                            </div>
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text text-lg font-semibold">🐛 Bug Information</span>
+                                </label>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="label-text">Bug Title *</span>
+                                    </label>
+                                    <input type="text" name="bugTitle" placeholder="Brief description of the bug" class="input input-bordered w-full" required />
+                                </div>
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="label-text">Severity Level *</span>
+                                    </label>
+                                    <select name="severity" class="select select-bordered w-full" required>
+                                        <option value="" disabled selected>Choose severity level</option>
+                                        <option value="Low">Low - Minor issue, workaround available</option>
+                                        <option value="Medium">Medium - Affects functionality but not critical</option>
+                                        <option value="High">High - Major functionality broken</option>
+                                        <option value="Critical">Critical - System unusable</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="label-text">Page/Feature *</span>
+                                    </label>
+                                    <select name="pageFeature" class="select select-bordered w-full" required>
+                                        <option value="" disabled selected>Where did the bug occur?</option>
+                                        <option value="Dashboard">Admin Dashboard</option>
+                                        <option value="Create Club">Create Club Page</option>
+                                        <option value="Manage Club">Manage Club Page</option>
+                                        <option value="Navigation">Navigation Menu</option>
+                                        <option value="Forms">Forms & Inputs</option>
+                                        <option value="Modals">Modal Windows</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="label-text">Browser & Version</span>
+                                    </label>
+                                    <input type="text" name="browser" placeholder="e.g., Chrome 120, Firefox 119" class="input input-bordered w-full" />
+                                </div>
+                            </div>
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text">Detailed Description *</span>
+                                </label>
+                                <textarea name="description" class="textarea textarea-bordered h-32 w-full" placeholder="Please describe the bug in detail. Include steps to reproduce, expected behavior, and actual behavior..." required></textarea>
+                            </div>
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text">Steps to Reproduce</span>
+                                </label>
+                                <textarea name="steps" class="textarea textarea-bordered h-24 w-full" placeholder="1. Go to...&#10;2. Click on...&#10;3. Fill in...&#10;4. Error occurs..."></textarea>
+                            </div>
+                        </div>
+                        <!-- Page 2: Additional Info -->
+                        <div id="page2" class="form-page hidden space-y-8">
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text text-lg font-semibold">📞 Contact Information</span>
+                                </label>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="label-text">Your Name *</span>
+                                    </label>
+                                    <input type="text" name="reporterName" placeholder="Enter your name" class="input input-bordered w-full" required />
+                                </div>
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="label-text">Email Address *</span>
+                                    </label>
+                                    <input type="email" name="email" placeholder="Enter your email" class="input input-bordered w-full" required />
+                                </div>
+                            </div>
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text text-lg font-semibold">📋 Additional Information</span>
+                                </label>
+                            </div>
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text">Screenshots or Files</span>
+                                </label>
+                                <input type="file" name="attachments" class="file-input file-input-bordered w-full" accept="image/*,.pdf,.doc,.docx" multiple />
+                                <label class="label">
+                                    <span class="label-text-alt">Upload screenshots or documents that help illustrate the bug (Max 10MB per file)</span>
+                                </label>
+                            </div>
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text">Additional Notes</span>
+                                </label>
+                                <textarea name="additionalNotes" class="textarea textarea-bordered h-20 w-full" placeholder="Any additional information that might help us understand or fix the bug..."></textarea>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="label-text">How urgent is this fix?</span>
+                                    </label>
+                                    <select name="urgency" class="select select-bordered w-full">
+                                        <option value="" disabled selected>Select urgency level</option>
+                                        <option value="Low">Low - Can wait for next update</option>
+                                        <option value="Medium">Medium - Should be fixed soon</option>
+                                        <option value="High">High - Needs immediate attention</option>
+                                    </select>
+                                </div>
+                                <div class="form-control">
+                                    <label class="label">
+                                        <span class="label-text">Have you reported this before?</span>
+                                    </label>
+                                    <select name="reportedBefore" class="select select-bordered w-full">
+                                        <option value="" disabled selected>Select an option</option>
+                                        <option value="No">No, this is the first time</option>
+                                        <option value="Yes">Yes, I reported it before</option>
+                                        <option value="Unsure">I'm not sure</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-control">
+                                <label class="cursor-pointer label">
+                                    <input type="checkbox" name="terms" class="checkbox checkbox-primary" required />
+                                    <span class="label-text">I agree to the terms and conditions and understand that this bug report will be reviewed by our development team *</span>
+                                </label>
+                            </div>
+                        </div>
+                        <!-- Navigation Buttons -->
+                        <div class="flex flex-col sm:flex-row gap-4 justify-between pt-6">
+                            <div class="flex gap-4">
+                                <button type="button" id="prevBtn" class="btn btn-outline btn-error hidden">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                                    </svg>
+                                    Previous
+                                </button>
+                                <button type="button" class="btn btn-outline btn-error" id="cancelBtn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                    Cancel
+                                </button>
+                                <button type="button" class="btn btn-outline btn-info" id="saveDraftBtn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3-3m0 0l-3 3m3-3v12" />
+                                    </svg>
+                                    Save Draft
+                                </button>
+                            </div>
+                            <div>
+                                <button type="button" id="nextBtn" class="btn btn-primary">
+                                    Next
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </button>
+                                <button type="submit" id="submitBtn" class="btn btn-primary hidden">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                    </svg>
+                                    Submit Bug Report
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Screen (Hidden by default) -->
+        <div class="w-[70%] max-w-4xl hidden" id="loadingScreen">
+            <div class="card bg-base-300 shadow-lg animate-pulse">
+                <div class="card-body p-8">
+                    <div class="space-y-6">
+                        <div class="h-8 bg-base-200 rounded w-1/3"></div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="h-12 bg-base-200 rounded"></div>
+                            <div class="h-12 bg-base-200 rounded"></div>
+                        </div>
+                        <div class="h-24 bg-base-200 rounded"></div>
+                        <div class="h-8 bg-base-200 rounded w-1/4"></div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="h-12 bg-base-200 rounded"></div>
+                            <div class="h-12 bg-base-200 rounded"></div>
+                        </div>
+                        <div class="flex justify-end gap-4">
+                            <div class="h-10 bg-base-200 rounded w-20"></div>
+                            <div class="h-10 bg-base-200 rounded w-24"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Modal -->
+        <dialog id="successModal" class="modal">
+            <div class="modal-box">
+                <div class="flex items-center gap-4">
+                    <div class="flex-shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-bold text-success">Bug Report Submitted!</h3>
+                        <p class="text-base-content/70 mt-2">Thank you for reporting this bug. Our development team will review it and get back to you soon.</p>
+                    </div>
+                </div>
+                <div class="modal-action">
+                    <button class="btn btn-success" onclick="successModal.close()">Close</button>
+                </div>
+            </div>
+            <div class="modal-backdrop" onclick="successModal.close()"></div>
+        </dialog>
+
+        <footer class="footer sm:footer-horizontal footer-center bg-base-300 text-base-content p-4 mt-8">
+            <aside>
+                <p>Copyright © 2025 - All right reserved by Rhim Angelo Sagales</p>
+            </aside>
+        </footer>
+    </main>
+    
+    <script>
+        window.onload = () => {
+            const defaultTheme = document.querySelector('.default-theme');
+            defaultTheme.click();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('bugReportForm');
+            const loadingScreen = document.getElementById('loadingScreen');
+            const successModal = document.getElementById('successModal');
+            const page1 = document.getElementById('page1');
+            const page2 = document.getElementById('page2');
+            const nextBtn = document.getElementById('nextBtn');
+            const prevBtn = document.getElementById('prevBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            const cancelBtn = document.getElementById('cancelBtn');
+            const saveDraftBtn = document.getElementById('saveDraftBtn');
+            // Progress indicators
+            const step1Indicator = document.getElementById('step1-indicator');
+            const step1Text = document.getElementById('step1-text');
+            const step2Indicator = document.getElementById('step2-indicator');
+            const step2Text = document.getElementById('step2-text');
+            const progressLine = document.getElementById('progress-line');
+            const currentStep = document.getElementById('current-step');
+            let currentPage = 1;
+            // Navigation functions
+            function showPage(page) {
+                if (page === 1) {
+                    page1.classList.remove('hidden');
+                    page2.classList.add('hidden');
+                    nextBtn.classList.remove('hidden');
+                    submitBtn.classList.add('hidden');
+                    prevBtn.classList.add('hidden');
+                    // Update progress indicators
+                    step1Indicator.classList.remove('bg-base-300', 'text-base-content');
+                    step1Indicator.classList.add('bg-primary', 'text-primary-content');
+                    step1Text.classList.remove('text-base-content/70');
+                    step1Text.classList.add('text-base-content');
+                    step2Indicator.classList.remove('bg-primary', 'text-primary-content');
+                    step2Indicator.classList.add('bg-base-300', 'text-base-content');
+                    step2Text.classList.remove('text-base-content');
+                    step2Text.classList.add('text-base-content/70');
+                    progressLine.classList.remove('bg-primary');
+                    progressLine.classList.add('bg-base-300');
+                    currentStep.textContent = 'Step 1 of 2';
+                } else {
+                    page1.classList.add('hidden');
+                    page2.classList.remove('hidden');
+                    nextBtn.classList.add('hidden');
+                    submitBtn.classList.remove('hidden');
+                    prevBtn.classList.remove('hidden');
+                    // Update progress indicators
+                    step1Indicator.classList.remove('bg-primary', 'text-primary-content');
+                    step1Indicator.classList.add('bg-base-300', 'text-base-content');
+                    step1Text.classList.remove('text-base-content');
+                    step1Text.classList.add('text-base-content/70');
+                    step2Indicator.classList.remove('bg-base-300', 'text-base-content');
+                    step2Indicator.classList.add('bg-primary', 'text-primary-content');
+                    step2Text.classList.remove('text-base-content/70');
+                    step2Text.classList.add('text-base-content');
+                    progressLine.classList.remove('bg-base-300');
+                    progressLine.classList.add('bg-primary');
+                    currentStep.textContent = 'Step 2 of 2';
+                }
+                currentPage = page;
+            }
+            // Validation function
+            function validateFields(container) {
+                const requiredFields = container.querySelectorAll('[required]');
+                let isValid = true;
+                requiredFields.forEach(field => {
+                    let isEmpty = false;
+                    if (field.type === 'checkbox') {
+                        isEmpty = !field.checked;
+                    } else if (field.tagName === 'SELECT') {
+                        isEmpty = !field.value || field.value === '';
+                    } else {
+                        isEmpty = !field.value.trim();
+                    }
+                    if (isEmpty) {
+                        field.classList.add('input-error');
+                        isValid = false;
+                    } else {
+                        field.classList.remove('input-error');
+                    }
+                });
+                return isValid;
+            }
+            // Event listeners
+            nextBtn.addEventListener('click', () => {
+                if (validateFields(page1)) {
+                    showPage(2);
+                } else {
+                    alert('Please fill in all required fields before proceeding.');
+                }
+            });
+            prevBtn.addEventListener('click', () => {
+                showPage(1);
+            });
+            cancelBtn.addEventListener('click', () => {
+                if (confirm('Are you sure you want to cancel? All entered data will be lost.')) {
+                    form.reset();
+                    showPage(1);
+                    // Remove any error styling
+                    form.querySelectorAll('.input-error').forEach(field => {
+                        field.classList.remove('input-error');
+                    });
+                }
+            });
+            saveDraftBtn.addEventListener('click', () => {
+                // Save form data to localStorage
+                const formData = new FormData(form);
+                const data = {};
+                for (let [key, value] of formData.entries()) {
+                    data[key] = value;
+                }
+                localStorage.setItem('bugReportDraft', JSON.stringify(data));
+                alert('Draft saved successfully!');
+            });
+            // Load draft on page load
+            const savedDraft = localStorage.getItem('bugReportDraft');
+            if (savedDraft) {
+                try {
+                    const data = JSON.parse(savedDraft);
+                    Object.keys(data).forEach(key => {
+                        const field = form.querySelector(`[name="${key}"]`);
+                        if (field) {
+                            if (field.type === 'checkbox') {
+                                field.checked = data[key] === 'on';
+                            } else {
+                                field.value = data[key];
+                            }
+                        }
+                    });
+                } catch (e) {
+                    console.error('Error loading draft:', e);
+                }
+            }
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                // Validate all fields
+                const page1Valid = validateFields(page1);
+                const page2Valid = validateFields(page2);
+                if (!page1Valid || !page2Valid) {
+                    alert('Please fill in all required fields before submitting.');
+                    return;
+                }
+                // Show loading screen
+                form.classList.add('hidden');
+                loadingScreen.classList.remove('hidden');
+                // Simulate form processing
+                setTimeout(() => {
+                    // Hide loading screen
+                    loadingScreen.classList.add('hidden');
+                    // Clear draft
+                    localStorage.removeItem('bugReportDraft');
+                    // Show success modal
+                    successModal.showModal();
+                    // Reset form
+                    form.reset();
+                    form.classList.remove('hidden');
+                    showPage(1);
+                }, 2000);
+            });
+            // Initialize
+            showPage(1);
+        });
+    </script>
+</body>
+</html>
