@@ -25,13 +25,35 @@ function createClub(req, res) {
         console.log('Validation failed: missing required fields');
         return res.status(400).json({ error: 'Missing required club fields.' });
     }
-    db.ref('clubs').child(clubData.clubName).set(clubData)
-        .then(() => {
-            res.status(201).json({ success: true, clubId: clubData.clubName });
+    // Check if club name or username already exists
+    db.ref('clubs').child(clubData.clubName).once('value')
+        .then(snapshot => {
+            if (snapshot.exists()) {
+                res.status(409).json({ error: 'Club name already exists.' });
+                return null;
+            }
+            // Check for username existence in all clubs
+            return db.ref('clubs').orderByChild('username').equalTo(clubData.username).once('value');
+        })
+        .then(usernameSnap => {
+            if (!usernameSnap) return; // Already responded above
+            if (usernameSnap && usernameSnap.numChildren() > 0) {
+                res.status(409).json({ error: 'Username already exists.' });
+                return null;
+            }
+            // Create club if both checks pass
+            return db.ref('clubs').child(clubData.clubName).set(clubData)
+                .then(() => {
+                    res.status(201).json({ success: true, clubId: clubData.clubName });
+                })
+                .catch(error => {
+                    console.error('Error creating club:', error);
+                    if (!res.headersSent) res.status(500).json({ error: error.message });
+                });
         })
         .catch(error => {
-            console.error('Error creating club:', error);
-            res.status(500).json({ error: error.message });
+            console.error('Error checking club existence:', error);
+            if (!res.headersSent) res.status(500).json({ error: error.message });
         });
 }
 

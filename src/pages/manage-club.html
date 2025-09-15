@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="../js/manage-club-socket.js"></script>
 
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
 
@@ -140,7 +141,7 @@
                         <!-- Center: Member Recruit & Status -->
                         <div class="flex flex-row items-center gap-4">
                             <span class="text-sm font-medium">Member Recruit</span>
-                            <input type="checkbox" class="toggle toggle-primary" checked />
+                            <input type="checkbox" class="toggle toggle-primary" id="clubMemberRecruitSwitch" checked />
                             <span class="text-sm font-medium">Status</span>
                             <input type="checkbox" class="toggle toggle-success" id="clubStatusToggle" checked />
                             <span id="clubStatusLabel" class="text-xs font-semibold text-success">Active</span>
@@ -172,17 +173,17 @@
                 <!-- 1. Club Name (2x1) - Medium horizontal -->
                 <div class="md:col-span-2 lg:col-span-2 bg-base-100 p-6 shadow-md rounded-md flex flex-col max-h-80 overflow-auto">
                     <!-- Club name -->
-                    <h2 class="text-2xl font-bold text-primary mb-2">🎓 Computer Science Society</h2>
+                    <h2 class="text-2xl font-bold text-primary mb-2 club-info-name">🎓 Computer Science Society</h2>
                     
                     <!-- Club type -->
-                    <p class="text-sm text-base-content/70 mb-4">Academic Club</p>
+                    <p class="text-sm text-base-content/70 mb-4 club-info-type">Academic Club</p>
                     
                     <!-- Phone number -->
                     <div class="flex items-center gap-1 text-sm text-base-content/60 mb-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                         </svg>
-                        <span>+1 (555) 123-4567</span>
+                        <span class="club-info-phone">+1 (555) 123-4567</span>
                     </div>
                     
                     <!-- Social media -->
@@ -190,7 +191,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
                         </svg>
-                        <span>@cssociety</span>
+                        <span class="club-info-social">@cssociety</span>
                     </div>
                     
                     <!-- Maximum members -->
@@ -198,7 +199,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                         </svg>
-                        <span>Max 50 members</span>
+                        <span class="club-info-max">Max 50 members</span>
                     </div>
                     
                     <!-- Meeting location -->
@@ -207,12 +208,12 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
-                        <span>Room 201, CS Building</span>
+                        <span class="club-info-location">Room 201, CS Building</span>
                     </div>
                     
                     <!-- Bottom row: Status on left, Action buttons on right -->
                     <div class="flex justify-between items-center mt-auto">
-                        <div class="badge badge-success badge-lg text-xs font-semibold">Active</div>
+                        <div class="badge badge-success badge-lg text-xs font-semibold club-info-status">Active</div>
                         <div class="flex gap-2">
                             <button class="btn btn-sm btn-outline btn-primary" onclick="editClubModal.showModal()">Edit</button>
                             <button class="btn btn-sm btn-outline btn-secondary" onclick="settingsModal.showModal()">Settings</button>
@@ -258,7 +259,7 @@
                 <!-- 3. Members (2x2) - Large square -->
                 <div class="md:col-span-2 lg:col-span-2 bg-base-100 p-6 shadow-md rounded-md max-h-80 overflow-hidden">
                     <div class="flex items-center justify-between mb-4 h-[10%]">
-                        <h3 class="text-lg font-semibold">👥 Members (24)</h3>
+                        <h3 class="text-lg font-semibold members-count-header">👥 Members (24)</h3>
                         <button class="btn btn-xs btn-primary btn-xs " onclick="applicantsModal.showModal()">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -266,7 +267,7 @@
                             Add
                         </button>
                     </div>
-                    <div class="space-y-3 h-[85%] overflow-y-auto">
+                    <div class="space-y-3 h-[85%] overflow-y-auto club-members-list">
                         <div class="flex items-center gap-3 p-2 hover:bg-base-200 rounded-lg">
                             <div class="avatar w-8 h-8 rounded-full bg-primary text-primary-content flex items-center justify-center text-xs font-bold">AI</div>
                             <div class="flex-1">
@@ -302,9 +303,7 @@
                 <div class="md:col-span-2 lg:col-span-2 bg-base-100 p-6 shadow-md rounded-md max-h-80 overflow-hidden">
                     <h3 class="text-lg font-semibold mb-3 inline-block h-[10%]">📝 Club Description</h3>
                     <div class="w-full h-[70%] overflow-auto">
-                        <p class="text-sm text-base-content/80 leading-relaxed">
-                            The Computer Science Society is dedicated to fostering innovation and collaboration among students passionate about technology. We organize coding workshops, hackathons, and networking events to help members develop their technical skills and build meaningful connections in the tech industry.
-    
+                        <p class="text-sm text-base-content/80 leading-relaxed club-description-text">
                             The Computer Science Society is dedicated to fostering innovation and collaboration among students passionate about technology. We organize coding workshops, hackathons, and networking events to help members develop their technical skills and build meaningful connections in the tech industry.
                         </p>
                     </div>
@@ -314,10 +313,10 @@
                 <!-- 5. Owner (1x1) - Small square -->
                 <div class="md:col-span-1 lg:col-span-1 bg-base-100 py-6 px-2 shadow-md rounded-md max-h-80 overflow-auto flex flex-col items-center justify-center">
                     <h3 class="text-lg font-semibold mb-3 text-nowrap">👤 Club Owner</h3>
-                    <div class="text-centern flex items-center justify-center flex-col">
-                        <div class="avatar mb-3 w-16 h-16 rounded-full bg-primary text-primary-content flex items-center justify-center text-xl font-bold">AJ</div>
-                        <p class="font-medium text-sm">Alex Johnson</p>
-                        <p class="text-xs text-base-content/70">alex.j@email.com</p>
+                    <div class="text-centern flex items-center justify-center flex-col club-owner-panel">
+                        <div class="avatar mb-3 w-16 h-16 rounded-full bg-primary text-primary-content flex items-center justify-center text-xl font-bold club-owner-initials">AJ</div>
+                        <p class="font-medium text-sm club-owner-name">Alex Johnson</p>
+                        <p class="text-xs text-base-content/70 club-owner-email">alex.j@email.com</p>
                     </div>
                 </div>
                 
@@ -394,20 +393,20 @@
                     </button>
                 </div>
                 
-                <form class="space-y-6">
+                <form class="space-y-6" id="editClubForm">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="form-control">
                             <label class="label">
                                 <span class="label-text font-semibold">Club Name *</span>
                             </label>
-                            <input type="text" value="Computer Science Society" class="input input-bordered w-full" required />
+                            <input type="text" id="editClubName" class="input input-bordered w-full required-field" />
                         </div>
                         
                         <div class="form-control">
                             <label class="label">
                                 <span class="label-text font-semibold">Club Type *</span>
                             </label>
-                            <select class="select select-bordered w-full" required>
+                            <select class="select select-bordered w-full required-field" id="editClubType">
                                 <option value="Academic" selected>Academic</option>
                                 <option value="Sports">Sports</option>
                                 <option value="Cultural">Cultural</option>
@@ -424,14 +423,14 @@
                             <label class="label">
                                 <span class="label-text font-semibold">Club Number *</span>
                             </label>
-                            <input type="text" value="CS-2024-001" class="input input-bordered w-full" required />
+                            <input type="text" id="editClubNumber" class="input input-bordered w-full required-field" />
                         </div>
                         
                         <div class="form-control">
                             <label class="label">
                                 <span class="label-text font-semibold">Club Email *</span>
                             </label>
-                            <input type="email" value="cssociety@university.edu" class="input input-bordered w-full" required />
+                            <input type="email" id="editClubEmail" class="input input-bordered w-full required-field" />
                         </div>
                     </div>
 
@@ -460,20 +459,20 @@
                     </button>
                 </div>
                 
-                <form class="space-y-6">
+                <form class="space-y-6" id="settingsForm">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="form-control">
                             <label class="label">
                                 <span class="label-text font-semibold">Maximum Members *</span>
                             </label>
-                            <input type="number" value="50" min="1" class="input input-bordered w-full" required />
+                            <input type="number" id="settingsMaxMembers" min="1" class="input input-bordered w-full required-field" />
                         </div>
                         
                         <div class="form-control">
                             <label class="label">
                                 <span class="label-text font-semibold">Meeting Location *</span>
                             </label>
-                            <input type="text" value="Room 201, CS Building" class="input input-bordered w-full" required />
+                            <input type="text" id="settingsMeetingLocation" class="input input-bordered w-full required-field" />
                         </div>
                     </div>
 
@@ -481,7 +480,7 @@
                         <label class="label">
                             <span class="label-text font-semibold">Meeting Frequency</span>
                         </label>
-                        <select class="select select-bordered w-full">
+                        <select class="select select-bordered w-full required-field" id="settingsMeetingFrequency">
                             <option value="Weekly" selected>Weekly</option>
                             <option value="Daily">Daily</option>
                             <option value="Bi-weekly">Bi-weekly</option>
@@ -615,18 +614,18 @@
                 </div>
                 
                 <form class="space-y-6">
-                    <div class="form-control">
+                    <div class="form-control w-full flex flex-col gap-1">
                         <label class="label">
                             <span class="label-text font-semibold">Club Goals & Objectives</span>
                         </label>
-                        <textarea class="textarea textarea-bordered h-32" placeholder="What are the main goals and objectives of your club?"></textarea>
+                        <textarea class="textarea textarea-bordered h-32 w-full" placeholder="What are the main goals and objectives of your club?" name="goals"></textarea>
                     </div>
 
-                    <div class="form-control">
+                    <div class="form-control w-full flex flex-col gap-1">
                         <label class="label">
                             <span class="label-text font-semibold">Requirements for Joining</span>
                         </label>
-                        <textarea class="textarea textarea-bordered h-32" placeholder="Any specific requirements or criteria for joining the club?"></textarea>
+                        <textarea class="textarea textarea-bordered h-32 w-full" placeholder="Any specific requirements or criteria for joining the club?" name="requirements"></textarea>
                     </div>
 
                     <div class="modal-action">
@@ -660,14 +659,14 @@
                             <label class="label">
                                 <span class="label-text font-semibold">Phone Number</span>
                             </label>
-                            <input type="tel" value="+1 (555) 123-4567" class="input input-bordered w-full" />
+                            <input type="text" value="+1 (555) 123-4567" class="input input-bordered w-full"  name="phone"/>
                         </div>
                         
                         <div class="form-control">
                             <label class="label">
                                 <span class="label-text font-semibold">Email Address</span>
                             </label>
-                            <input type="email" value="cssociety@university.edu" class="input input-bordered w-full" />
+                            <input type="text" value="cssociety@university.edu" class="input input-bordered w-full" name="email"/>
                         </div>
                     </div>
 
@@ -675,7 +674,7 @@
                         <label class="label">
                             <span class="label-text font-semibold">Social Media Link</span>
                         </label>
-                        <input type="url" value="@cssociety" class="input input-bordered w-full" />
+                        <input type="text" value="@cssociety" class="input input-bordered w-full" name="socialMedia"/>
                     </div>
 
                     <div class="modal-action">
@@ -948,19 +947,7 @@
                 });
             }
         });
-        // Club login modal logic
-        document.addEventListener('DOMContentLoaded', () => {
-            const clubLoginModal = document.getElementById('clubLoginModal');
-            const clubLoginForm = document.getElementById('clubLoginForm');
-            if (clubLoginModal && clubLoginForm) {
-                clubLoginForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    // Here you would check credentials against your backend or Firebase
-                    // For now, just close the modal
-                    clubLoginModal.close();
-                });
-            }
-        });
+        // ...existing code...
         window.onload = () => {
             const defaultTheme = document.querySelector('.default-theme');
             defaultTheme.click();

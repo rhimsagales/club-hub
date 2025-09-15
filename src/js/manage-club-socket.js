@@ -1,0 +1,410 @@
+// Store latest club data for modal injection
+let latestClubData = null;
+// manage-club-socket.js
+// Handles login, socket.io connection, and club data injection for manage-club.html
+
+// Save changes for Additional Info form
+document.addEventListener('DOMContentLoaded', function() {
+    // Create Event form logic
+    const createEventForm = document.querySelector('#createEventModal form');
+    if (createEventForm) {
+        createEventForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const eventName = createEventForm.querySelector('input[type="text"]').value.trim();
+            const eventType = createEventForm.querySelector('select').value;
+            const eventDate = createEventForm.querySelector('input[type="date"]').value;
+            const eventTime = createEventForm.querySelector('input[type="time"]').value;
+            // Get clubName from latestClubData
+            const clubName = window.latestClubData?.clubName;
+            if (!clubName || !eventName || !eventType || !eventDate || !eventTime) {
+                alert('Please fill in all event fields.');
+                return;
+            }
+            try {
+                await fetch('/api/create-event', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ clubName, eventName, eventType, eventDate, eventTime })
+                });
+                if (typeof createEventModal !== 'undefined') createEventModal.close();
+            } catch (err) {
+                alert('Failed to create event.');
+            }
+        });
+    }
+    const additionalInfoForm = document.querySelector('#additionalInfoModal form');
+    if (additionalInfoForm) {
+        additionalInfoForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const goals = additionalInfoForm.elements['goals'].value.trim();
+            const requirements = additionalInfoForm.elements['requirements'].value.trim();
+            try {
+                await fetch('/api/update-club', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: window.clubUsername,
+                        goals,
+                        requirements
+                    })
+                });
+                if (typeof additionalInfoModal !== 'undefined') additionalInfoModal.close();
+            } catch (err) {
+                alert('Failed to save additional info.');
+            }
+        });
+    }
+
+        // Save changes for Contact Info form
+        const contactInfoForm = document.querySelector('#contactInfoModal form');
+        if (contactInfoForm) {
+            contactInfoForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const phone = contactInfoForm.elements['phone'].value.trim();
+                const email = contactInfoForm.elements['email'].value.trim();
+                const socialMedia = contactInfoForm.elements['socialMedia'].value.trim();
+                try {
+                    await fetch('/api/update-club', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            username: window.clubUsername,
+                            phone,
+                            email,
+                            socialMedia
+                        })
+                    });
+                    if (typeof contactInfoModal !== 'undefined') contactInfoModal.close();
+                } catch (err) {
+                    alert('Failed to save contact info.');
+                }
+            });
+        }
+
+    // Member Recruit switch logic
+    const memberRecruitSwitch = document.getElementById('clubMemberRecruitSwitch');
+    if (memberRecruitSwitch) {
+        memberRecruitSwitch.addEventListener('change', async function() {
+            try {
+                await fetch('/api/update-club', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: window.clubUsername,
+                        memberRecruitment: !!memberRecruitSwitch.checked
+                    })
+                });
+            } catch (err) {
+                alert('Failed to update member recruitment status.');
+            }
+        });
+    }
+
+    // Status switch logic
+    const statusSwitch = document.getElementById('clubStatusToggle');
+    if (statusSwitch) {
+        statusSwitch.addEventListener('change', async function() {
+            try {
+                await fetch('/api/update-club', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: window.clubUsername,
+                        activeStatus: !!statusSwitch.checked
+                    })
+                });
+            } catch (err) {
+                alert('Failed to update club status.');
+            }
+        });
+    }
+});
+
+// Event listener for Edit Club Information form
+document.addEventListener('DOMContentLoaded', function() {
+    const editForm = document.getElementById('editClubForm');
+    if (editForm) {
+        editForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            console.log('Edit Club Information form submit event triggered');
+            // Collect form data
+            const updated = {
+                clubName: document.getElementById('editClubName').value.trim(),
+                clubType: document.getElementById('editClubType').value,
+                clubNumber: document.getElementById('editClubNumber').value.trim(),
+                email: document.getElementById('editClubEmail').value.trim(),
+            };
+            // Send to backend
+            try {
+                await fetch('/api/update-club', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: window.clubUsername, ...updated })
+                });
+                location.reload(); // Reload to reflect changes, especially if clubName changed
+            } catch (err) {
+                alert('Failed to save changes.');
+            }
+        });
+    }
+
+    // Settings form saving logic
+    const settingsForm = document.getElementById('settingsForm');
+    if (settingsForm) {
+        settingsForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            console.log('Settings form submit event triggered');
+            // Collect form data
+            const updated = {
+                maxMembers: document.getElementById('settingsMaxMembers').value,
+                meetingLocation: document.getElementById('settingsMeetingLocation').value.trim(),
+                meetingFrequency: document.getElementById('settingsMeetingFrequency').value,
+            };
+            // Send to backend
+            try {
+                await fetch('/api/update-club', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: window.clubUsername, ...updated })
+                });
+                // Optionally close modal if present
+                if (typeof settingsModal !== 'undefined') settingsModal.close();
+            } catch (err) {
+                alert('Failed to save settings.');
+            }
+        });
+    }
+});
+
+// Club login modal logic with socket.io
+
+document.addEventListener('DOMContentLoaded', () => {
+    const clubLoginModal = document.getElementById('clubLoginModal');
+    const clubLoginForm = document.getElementById('clubLoginForm');
+    if (clubLoginModal && clubLoginForm) {
+        clubLoginForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginClubPassword').value;
+            // Send credentials to backend for validation
+            try {
+                const res = await fetch('/api/club-login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const result = await res.json();
+                if (!result.success) {
+                    // Wrong credentials, reload page and show modal again
+                    window.location.reload();
+                } else {
+                    // Credentials correct, close modal and connect socket
+                    clubLoginModal.close();
+                    window.clubUsername = username;
+                    window.latestClubData = {
+                        clubName: result.clubName
+                    };
+                    connectClubSocket(username);
+                }
+            } catch (err) {
+                alert('Login failed. Please try again.');
+                window.location.reload();
+            }
+        });
+    }
+
+    // Save changes for Club Description form
+    const descForm = document.querySelector('#editDescriptionModal form');
+    if (descForm) {
+        descForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const clubDescription = descForm.querySelector('textarea').value.trim();
+            try {
+                await fetch('/api/update-club', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: window.clubUsername,
+                        clubDescription
+                    })
+                });
+                if (typeof editDescriptionModal !== 'undefined') editDescriptionModal.close();
+            } catch (err) {
+                alert('Failed to save club description.');
+            }
+        });
+    }
+});
+
+// Socket.io connection and club data listener
+function connectClubSocket(username) {
+    // Load socket.io client script from CDN if not loaded
+    if (typeof io === 'undefined') {
+        const script = document.createElement('script');
+        script.src = 'https://cdn.socket.io/4.7.5/socket.io.min.js';
+        script.onload = () => {
+            startSocket(username);
+        };
+        document.body.appendChild(script);
+    } else {
+        startSocket(username);
+    }
+}
+
+function startSocket(username) {
+    const socket = io();
+    socket.emit('club-login', { username });
+    socket.on('club-data', (clubData) => {
+        // TODO: Inject clubData into UI, replacing dummy/placeholder data
+        injectClubData(clubData);
+    });
+    socket.on('club-login-failed', () => {
+        // If server rejects login, reload and prompt again
+        window.location.reload();
+    });
+}
+
+// Replace placeholder data with real club data
+function injectClubData(clubData) {
+    // Inject data into Club Description form textarea
+    const descForm = document.querySelector('#editDescriptionModal form');
+    if (descForm) {
+        const descTextarea = descForm.querySelector('textarea');
+        if (descTextarea) descTextarea.value = clubData.clubDescription || '';
+    }
+    
+    // Additional Info Modal fields
+    const goalsField = document.querySelector('#additionalInfoModal [name="goals"]');
+    if (goalsField) goalsField.value = clubData.goals || '';
+    const requirementsField = document.querySelector('#additionalInfoModal [name="requirements"]');
+    if (requirementsField) requirementsField.value = clubData.requirements || '';
+
+    // Contact Info Modal fields
+    const phoneField = document.querySelector('#contactInfoModal [name="phone"]');
+    if (phoneField) phoneField.value = clubData.phone || '';
+    const emailField = document.querySelector('#contactInfoModal [name="email"]');
+    if (emailField) emailField.value = clubData.email || '';
+    const socialMediaField = document.querySelector('#contactInfoModal [name="socialMedia"]');
+    if (socialMediaField) socialMediaField.value = clubData.socialMedia || '';
+
+    // Member Recruit switch (boolean)
+    const memberRecruitSwitch = document.getElementById('clubMemberRecruitSwitch');
+    if (memberRecruitSwitch) memberRecruitSwitch.checked = !!clubData.memberRecruitment;
+
+    // Status switch (boolean)
+    const statusSwitch = document.getElementById('clubStatusToggle');
+    if (statusSwitch) statusSwitch.checked = !!clubData.activeStatus;
+    // Also update status label if present
+    const statusLabel = document.getElementById('clubStatusLabel');
+    if (statusLabel) statusLabel.textContent = clubData.activeStatus ? 'Active' : 'Inactive';
+    // Only inject data into UI panels
+    if (!clubData) return;
+    // Club description
+    const descEl = document.querySelector('.club-description-text');
+    if (descEl) descEl.textContent = clubData.clubDescription || 'No description available.';
+
+    // Club owner
+    const ownerNameEl = document.querySelector('.club-owner-name');
+    if (ownerNameEl) ownerNameEl.textContent = clubData.clubOwner || 'N/A';
+
+    const ownerEmailEl = document.querySelector('.club-owner-email');
+    if (ownerEmailEl) ownerEmailEl.textContent = clubData.email || 'N/A';
+
+    const ownerInitialsEl = document.querySelector('.club-owner-initials');
+    if (ownerInitialsEl) {
+        let initials = '?';
+        if (clubData.clubOwner && typeof clubData.clubOwner === 'string') {
+            const parts = clubData.clubOwner.trim().split(' ');
+            initials = parts.length > 1 ? (parts[0][0] + parts[parts.length-1][0]).toUpperCase() : parts[0][0].toUpperCase();
+        }
+        ownerInitialsEl.textContent = initials;
+    }
+
+    // Club info panel
+    const clubNameEl = document.querySelector('.club-info-name');
+    if (clubNameEl) clubNameEl.textContent = clubData.clubName || 'N/A';
+
+    const clubTypeEl = document.querySelector('.club-info-type');
+    if (clubTypeEl) clubTypeEl.textContent = clubData.clubType || 'N/A';
+
+    const clubPhoneEl = document.querySelector('.club-info-phone');
+    if (clubPhoneEl) clubPhoneEl.textContent = clubData.phoneNumber || 'N/A';
+
+    const clubSocialEl = document.querySelector('.club-info-social');
+    if (clubSocialEl) clubSocialEl.textContent = clubData.socialMedia || 'N/A';
+
+    const clubMaxEl = document.querySelector('.club-info-max');
+    if (clubMaxEl) clubMaxEl.textContent = clubData.maxMembers ? `Max ${clubData.maxMembers} members` : 'N/A';
+
+    const clubLocationEl = document.querySelector('.club-info-location');
+    if (clubLocationEl) clubLocationEl.textContent = clubData.meetingLocation || 'N/A';
+
+    const clubStatusBadge = document.querySelector('.club-info-status');
+    if (clubStatusBadge) {
+        if (clubData.activeStatus) {
+            clubStatusBadge.textContent = 'Active';
+            clubStatusBadge.classList.add('badge-success');
+            clubStatusBadge.classList.remove('badge-error');
+        } else {
+            clubStatusBadge.textContent = 'Inactive';
+            clubStatusBadge.classList.add('badge-error');
+            clubStatusBadge.classList.remove('badge-success');
+        }
+    }
+
+    // Members panel
+    const membersListEl = document.querySelector('.club-members-list');
+    if (membersListEl) {
+        membersListEl.innerHTML = '';
+        const membersObj = clubData.members;
+        if (membersObj && typeof membersObj === 'object' && Object.keys(membersObj).length > 0) {
+            Object.entries(membersObj).forEach(([role, name]) => {
+                let initials = '?';
+                if (typeof name === 'string' && name.trim()) {
+                    const parts = name.trim().split(' ');
+                    initials = parts.length > 1 ? (parts[0][0] + parts[parts.length-1][0]).toUpperCase() : parts[0][0].toUpperCase();
+                }
+                const memberDiv = document.createElement('div');
+                memberDiv.className = 'flex items-center gap-3 p-2 hover:bg-base-200 rounded-lg';
+                memberDiv.innerHTML = `
+                    <div class="avatar w-8 h-8 rounded-full bg-primary text-primary-content flex items-center justify-center text-xs font-bold">${initials}</div>
+                    <div class="flex-1">
+                        <p class="font-medium text-sm">${name || 'N/A'}</p>
+                        <p class="text-xs text-base-content/70">${role}</p>
+                    </div>
+                `;
+                membersListEl.appendChild(memberDiv);
+            });
+            // Inject total count of members into header
+            const membersHeader = document.querySelector('.members-count-header');
+            if (membersHeader) {
+                membersHeader.textContent = `Members (${Object.keys(membersObj).length})`;
+            }
+        } else {
+            membersListEl.innerHTML = '<div class="text-sm text-base-content/70">No members found.</div>';
+            // Inject zero count if no members
+            const membersHeader = document.querySelector('.members-count-header');
+            if (membersHeader) {
+                membersHeader.textContent = 'Members (0)';
+            }
+        }
+    }
+
+    // Inject data into Edit Club form fields
+    const editClubName = document.getElementById('editClubName');
+    if (editClubName) editClubName.value = clubData.clubName || '';
+    const editClubType = document.getElementById('editClubType');
+    if (editClubType) editClubType.value = clubData.clubType || '';
+    const editClubNumber = document.getElementById('editClubNumber');
+    if (editClubNumber) editClubNumber.value = clubData.clubNumber || '';
+    const editClubEmail = document.getElementById('editClubEmail');
+    if (editClubEmail) editClubEmail.value = clubData.email || '';
+
+    // Inject data into Settings form fields
+    const settingsMaxMembers = document.getElementById('settingsMaxMembers');
+    if (settingsMaxMembers) settingsMaxMembers.value = clubData.maxMembers || '';
+    const settingsMeetingLocation = document.getElementById('settingsMeetingLocation');
+    if (settingsMeetingLocation) settingsMeetingLocation.value = clubData.meetingLocation || '';
+    const settingsMeetingFrequency = document.getElementById('settingsMeetingFrequency');
+    if (settingsMeetingFrequency) settingsMeetingFrequency.value = clubData.meetingFrequency || '';
+}
