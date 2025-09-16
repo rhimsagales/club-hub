@@ -178,6 +178,51 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Club login modal logic with socket.io
 
+function renderEvents(name, date, time, type, color) {
+    const mainDiv = document.createElement('div');
+    mainDiv.className = 'p-4 bg-base-200 rounded-lg aspect-square';
+
+    const circleNameContainer = document.createElement('div');
+
+    circleNameContainer.className = 'flex items-center mb-2';
+
+    circleDiv = document.createElement('div');
+    circleDiv.className = `w-3 aspect-square rounded-full mr-2 ${color}`;
+
+    const nameEl = document.createElement('h3');
+    nameEl.className = 'text-lg font-semibold';
+    nameEl.textContent = name;
+
+    circleNameContainer.appendChild(circleDiv);
+    circleNameContainer.appendChild(nameEl);
+    mainDiv.appendChild(circleNameContainer);
+
+    const dateEl = document.createElement('p');
+    dateEl.className = 'text-xs text-base-content/70';
+    dateEl.textContent = `${date} | ${time}`;
+    
+    const typeEl = document.createElement('p');
+    typeEl.className = 'text-xs mt-1';
+    typeEl.textContent = type;
+
+    mainDiv.appendChild(dateEl);
+    mainDiv.appendChild(typeEl);
+    
+    document.querySelector('.event-container').appendChild(mainDiv);
+
+
+}
+
+function countActiveInactiveClubs(clubs) {
+    let activeCount = 0;
+    let inactiveCount = 0;
+}
+
+
+function startClubSocket(){
+
+} 
+
 document.addEventListener('DOMContentLoaded', () => {
     const clubLoginModal = document.getElementById('clubLoginModal');
     const clubLoginForm = document.getElementById('clubLoginForm');
@@ -196,6 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const result = await res.json();
                 if (!result.success) {
                     // Wrong credentials, reload page and show modal again
+                    alert('Wrong/Not existing credentials. Please try again.')
                     window.location.reload();
                 } else {
                     // Credentials correct, close modal and connect socket
@@ -212,6 +258,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    
 
     // Save changes for Club Description form
     const descForm = document.querySelector('#editDescriptionModal form');
@@ -252,7 +300,7 @@ function connectClubSocket(username) {
 }
 
 function startSocket(username) {
-    const socket = io();
+    const socket = io('/clubOwners');
     socket.emit('club-login', { username });
     socket.on('club-data', (clubData) => {
         // TODO: Inject clubData into UI, replacing dummy/placeholder data
@@ -263,6 +311,14 @@ function startSocket(username) {
         window.location.reload();
     });
 }
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min; // The maximum is exclusive and the minimum is inclusive
+}
+
+const colors = ['bg-sucess', 'bg-error', 'bg-warning', 'bg-info', 'bg-primary', 'bg-secondary', 'bg-accent'];
 
 // Replace placeholder data with real club data
 function injectClubData(clubData) {
@@ -407,4 +463,16 @@ function injectClubData(clubData) {
     if (settingsMeetingLocation) settingsMeetingLocation.value = clubData.meetingLocation || '';
     const settingsMeetingFrequency = document.getElementById('settingsMeetingFrequency');
     if (settingsMeetingFrequency) settingsMeetingFrequency.value = clubData.meetingFrequency || '';
+
+
+    //Render events
+    if (clubData.events && typeof clubData.events === 'object' && Object.keys(clubData.events).length > 0) {
+        document.querySelector('.event-container').innerHTML = '';
+
+        Object.values(clubData.events).forEach(event => {
+        renderEvents(event.eventName, event.eventDate, event.eventTime, event.eventType, colors[getRandomInt(0, colors.length - 1)]);
+    })
+    }
+
+    
 }

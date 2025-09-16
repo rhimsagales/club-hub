@@ -11,6 +11,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Rubik+Dirt&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 
     <link rel="stylesheet" href="../css/global-custom.css">
     <title>Admin Dashboard</title>
@@ -93,15 +95,15 @@
                 <div class="w-full h-1/2 flex items-center justify-start">
                     🟢 Total Active Clubs
                 </div>
-                <div class="w-full h-1/2 flex items-center justify-end text-secondary text-2xl font-bold">
-                    1
+                <div class="w-full h-1/2 flex items-center justify-end text-secondary text-2xl font-bold" id="totalActiveClubs">
+                    0
                 </div>
             </div>
             <div class="w-[310px] grow h-[150px] bg-base-100 p-4 shadow-md rounded-md hidden real-contents">
                 <div class="w-full h-1/2 flex items-center justify-start">
                     🟡 Total Inactive Clubs
                 </div>
-                <div class="w-full h-1/2 flex items-center justify-end text-secondary text-2xl font-bold">
+                <div class="w-full h-1/2 flex items-center justify-end text-secondary text-2xl font-bold" id="totalInactiveClubs">
                     0
                 </div>
             </div>
@@ -140,7 +142,7 @@
                     
                     <table class="table table-zebra">
                       
-                      <tbody>
+                      <tbody class="dashboard-tbody">
                         <!-- row 1 -->
                         <tr class="h-16 even:bg-base-200 odd:bg-base-300">
                           <th class="text-center w-[20%]">1</th>
@@ -237,5 +239,7 @@
             }, 2000)
         })
     </script>
+
+    <script src="../js/dashboard-socket.js"></script>
 </body>
 </html>

@@ -112,8 +112,33 @@ app.get('/', (req, res) => {
     res.send('ClubHub API is running');
 });
 
+// DELETE club route
+app.delete('/api/delete-club', async (req, res) => {
+    try {
+        const { clubName } = req.body;
+        if (!clubName) {
+            return res.status(400).json({ success: false, message: 'Club name required.' });
+        }
+        // Firebase Admin SDK logic
+        const clubRef = admin.database().ref('clubs');
+        // Find club by name
+        const snapshot = await clubRef.orderByChild('clubName').equalTo(clubName).once('value');
+        if (!snapshot.exists()) {
+            return res.status(404).json({ success: false, message: 'Club not found.' });
+        }
+        // Get club key
+        const clubKey = Object.keys(snapshot.val())[0];
+        // Remove club
+        await clubRef.child(clubKey).remove();
+        return res.json({ success: true });
+    } catch (err) {
+        console.error('Error deleting club:', err);
+        return res.status(500).json({ success: false, message: 'Server error.' });
+    }
+});
+
 // Socket.io logic
-io.on('connection', (socket) => {
+io.of('/clubOwners').on('connection', (socket) => {
     socket.on('club-login', async ({ username }) => {
         // Find club node by username
         const clubsSnap = await admin.database().ref('clubs').once('value');
@@ -138,6 +163,12 @@ io.on('connection', (socket) => {
             clubRef.off('value', listener);
         });
     });
+});
+
+io.of('/general').on('connection', (socket) => {
+    admin.database().ref('clubs').on('value', (snap) => {
+        socket.emit('all-clubs-data', snap.val());
+    })
 });
 
 server.listen(PORT, () => {
