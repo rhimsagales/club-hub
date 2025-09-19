@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="synthwave">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Rubik+Dirt&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../src/css/global-custom.css">
+    <title>Student Dashboard - ClubHub</title>
+</head>
+<body class="bg-base-200 w-full min-h-screen inter text-base-content pt-16  ">
+    <div class="navbar bg-base-100 shadow-sm px-8 fixed top-0 z-[20] w-full flex items-center justify-between">
+        <div class="navbar-center flex items-center gap-2">
+            <a href="#" class="btn btn-ghost text-4xl cherry-bomb-one-regular text-primary">ClubHub</a>
+        </div>
+        <div class="dropdown dropdown-end tooltip tooltip-left" data-tip="Change theme">
+            <div tabindex="0" role="button" class="btn btn-circle btn-ghost btn-sm hover:bg-base-300">
+                <div class="bg-base-100 group-hover:border-base-content/20 border-base-content/10 grid shrink-0 grid-cols-2 gap-0.5 rounded-md border p-1 transition-colors">
+                    <div class="bg-base-content size-1 rounded-full"></div>
+                    <div class="bg-primary size-1 rounded-full"></div>
+                    <div class="bg-secondary size-1 rounded-full"></div>
+                    <div class="bg-accent size-1 rounded-full"></div>
+                </div>
+            </div>
+            <ul tabindex="0" class="menu dropdown-content bg-base-100 rounded-box z-1 mt-4 w-52 p-2 shadow-sm gap-2">
+                <li class="menu-title">Theme</li>
+                <li>
+                    <input type="radio" name="theme-buttons" class="btn btn-xs rounded-full theme-controller join-item default-theme" aria-label="Default" value="default" />
+                </li>
+                <li>
+                    <input type="radio" name="theme-buttons" class="btn btn-xs rounded-full theme-controller join-item" aria-label="Night" value="night" />
+                </li>
+                <li>
+                    <input type="radio" name="theme-buttons" class="btn btn-xs rounded-full theme-controller join-item" aria-label="Light" value="bumblebee" />
+                </li>
+                <li>
+                    <input type="radio" name="theme-buttons" class="btn btn-xs rounded-full theme-controller join-item" aria-label="Lofi" value="lofi" />
+                </li>
+            </ul>
+        </div>
+    </div>
+    <% 
+        function getFirstInitial(fullName) {
+            // Trim to remove leading/trailing spaces and split the name by spaces
+            const names = fullName.trim().split(" ");
+
+            // Return the first letter of the first name
+            return names[0] ? names[0][0] : '';
+        }
+
+    %>
+    <% 
+        function countOfOfficialMembers(club) {
+            return Object.values(club.members).filter(member => !member.pending).length;
+        }
+     %>
+    <% if(club.announcement) { %>
+        <div role="alert" class="alert alert-info mx-4 rounded-lg sticky top-16 left-0 right-0 mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="h-6 w-6 shrink-0 stroke-current">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>New software update available.</span>
+        </div>
+    <%}%>
+    <div class="w-full flex flex-col gap-4">
+        
+        <div class="w-full h-screen flex flex-wrap justify-center gap-4 px-16 box-border">
+            
+            <div class="w-[15%] h-[350px] bg-base-300 rounded-md shadow-md flex flex-col gap-2 items-center justify-center p-2">
+                <span class="text-2xl font-semibold">Club Owner</span>
+                <div class="rounded-full h-20 aspect-square bg-primary flex items-center justify-center text-3xl font-bold text-base-100">
+                    <%= getFirstInitial(club.clubOwner) %>
+                </div>
+                <div class="flex flex-col">
+                    
+                    <span class="text-center text-wrap font-bold"><%= club.clubOwner %></span>
+                    <a href="mailto:<%= club.email %>" class="text-center text-wrap text-base-content/70 leading-xs hover:underline " target="_blank"><%= club.email %></a>
+                </div>
+                
+            </div>
+            <div class="w-[45%] h-[350px] bg-base-300 rounded-md shadow-md flex flex-col gap-2 p-8">
+                <div class="w-full h-[40%] flex flex-col items-start justify-center gap-1">
+                    <p class="text-wrap text-3xl font-semibold">🏢<span><%= club.clubName ? club.clubName : "N/A" %></span></p>
+                    <span class="text-base-content/70 text-xl font-semibold"><%= club.clubType ? club.clubType : "N/A" %></span>
+                </div>
+                <div class="w-full h-[60%] gap-2 flex items-center justify-between text-left">
+                    <div class="w-1/2 h-full flex flex-col justify-between items-start">
+                        <div class="w-full flex flex-col">
+                            <span class="text-base-content/70 text-sm">Phone Number</span>
+                            <a class="font-semibold hover:underline cursor-pointer" href="tel:<%= club.phone %>" target="_blank"><%= club.phone %></a>
+                        </div>
+                        <div class="w-full flex flex-col">
+                            <span class="text-base-content/70 text-sm">Social Link</span>
+                            <a class="font-semibold hover:underline cursor-pointer" href="<%= club.socialMedia %>" target="_blank"><%= club.socialMedia %></a>
+                        </div>
+                        <div class="w-full flex flex-col">
+                            <span class="text-base-content/70 text-sm">Max Members</span>
+                            <span class="font-semibold"><%= club.maxMembers %></span>
+                        </div>
+
+                    </div>
+                    <div class="w-1/2 h-full flex flex-col justify-between items-start">
+                        <div class="w-full flex flex-col">
+                            <span class="text-base-content/70 text-sm">Meeting Frequency</span>
+                            <span class="font-semibold "><%=  club.meetingFrequency%></span>
+                        </div>
+                        <div class="w-full flex flex-col">
+                            <span class="text-base-content/70 text-sm">Meeting Location</span>
+                            <span class="font-semibold "><%= club.meetingLocation %></span>
+                        </div>
+                        <div class="w-full flex flex-col">
+                            <span class="text-base-content/70 text-sm">Club Status</span>
+                            <span class="font-semibold <%= club.activeStatus ? "text-success" : "text-error" %>"><%= club.activeStatus ? "Active" : "Inactive" %></span>
+                        </div>
+                    </div>
+                </div>
+        
+            </div>
+            <div class="w-[37%] h-[350px] bg-base-300 rounded-md shadow-md p-4 flex flex-col gap-2">
+                <div class="w-full h-auto flex items-center justify-between text-2xl font-semibold">
+                    <span>👥Members(<%= Object.values(club.members).filter(member => !member.pending).length %>)</span>
+                    <span class="flex text-xs badge-lg badge <%=  club.memberRecruitment ? "badge-success" : "badge-error" %>" >
+                        <%= 
+                        club.memberRecruitment
+                            ? (parseInt(countOfOfficialMembers(club)) <= parseInt(club.maxMembers)
+                                ? "Membership Available"
+                                : "Membership Closed")
+                            : "Membership Closed"
+                        %> 
+                    
+                    </span>
+                </div>
+                <div class="w-full h-full  overflow-y-auto bg-base-200 rounded-md flex flex-col gap-2 p-2">
+                    
+                    <% if (club.members) { %>
+                        <% for(const member of Object.values(club.members)) { %>
+                            <% if (!member.pending) { %>
+                                <div class="w-full h-16 min-h-16 bg-base-300/70 rounded-md flex gap-4 items-center p-4">
+                                <div class="rounded-full h-10 aspect-square bg-primary flex items-center justify-center text-lg font-bold text-base-100 flex items-center justify-center">
+                                        <%= getFirstInitial(member.name) %>
+                                    </div>
+                                    <div class="h-full flex flex-col justify-center">
+                                        <span class="font-semibold"><%= member.name %></span>
+                                        <span class="text-base-content/70 text-xs">
+                                            <%= member.role %>
+                                        </span>
+                                        
+                                    </div>
+                                </div>
+                            <% } %>
+
+                        <% } %>
+                    <% } %>
+                </div>
+        
+            </div>
+            <div class="w-[27.3%] h-[350px] bg-base-300 rounded-md shadow-md p-8 flex flex-col gap-2">
+                <span class="text-2xl font-semibold">📖Club Description</span>
+                <div class="w-full h-full overflow-y-auto">
+                    <p class="text-justify text-base-content/70"><%= club.clubDescription%></p>
+                </div>
+            </div>
+            <div class="w-[32.3%] h-[350px] bg-base-300 rounded-md shadow-md p-8 flex flex-col gap-2">
+                <span class="text-2xl font-semibold">
+                    📋Club Tasks
+                </span>
+                <div class="p-2 w-full h-full overflow-y-auto flex flex-col gap-4 bg-base-200 rounded-md">
+                    <% if (club.clubTask) { %>
+                        <% club.clubTask.forEach(function(task) { %>
+                            <div class="w-full h-auto  bg-base-300/70 rounded-md flex gap-4 items-center p-4">
+                                <div class="h-full w-[5%] flex items-center justify-center text-lg font-bold text-base-100 flex items-center justify-center">
+                                    <div class="rounded-full h-2 aspect-square bg-primary"></div>
+                                </div>
+                                <div class="h-full flex flex-col justify-center">
+                                    <span class=""><%= task %></span>
+                                </div>  
+                            </div>
+                        <% }); %>
+                    <% } else { %>
+                        <p class="text-base-content/70">No tasks available.</p>
+                    <% } %>
+                </div>
+            </div>
+            <div class="w-[37.3%] h-[350px] bg-base-300 rounded-md shadow-md p-8 flex flex-col gap-2">
+                <span class="text-2xl font-semibold">
+                    📅Upcoming Events
+                </span>
+                <div class="p-2 w-full h-full overflow-y-auto flex flex-wrap justify-start gap-2 bg-base-200 rounded-md box-border">
+                    <!-- <div class="w-[31.3%] aspect-square max-h-fit bg-base-300/70 rounded-md flex flex-col items-start justify-start text-base-content/70 p-2">
+                        <div class="w-full flex items-center gap-2 h-fit mb-2">
+                            <div class="min-w-2 w-2 h-2 min-h-2 max-h-2 rounded-full bg-red-300">
+
+                            </div>
+                            <span class="text-sm font-semibold break-all whitespace-normal">
+                                CSS Weeksasasasasasasasasas
+                            </span>
+                            
+                        </div>
+                        <span class="text-xs text-base-content/70">2025-09-16 | 08:30 pm</span>
+                        <span class="text-xs text-base-content">Meeting</span>
+                    </div> -->
+                    <% let colors = ['bg-sucess', 'bg-error', 'bg-warning', 'bg-info', 'bg-primary', 'bg-secondary', 'bg-accent']; %>
+                    <% 
+                        function getRandomInt(min, max) {
+                            min = Math.ceil(min);
+                            max = Math.floor(max);
+                            return Math.floor(Math.random() * (max - min)) + min; // The maximum is exclusive and the minimum is inclusive
+                        }
+                    %>
+                    <% if (club.events) { %>
+                        <% club.events.forEach(function(event) { %>
+                            <div class="w-[31.3%] aspect-square max-h-fit bg-base-300/70 rounded-md flex flex-col items-start justify-start text-base-content/70 p-2">
+                                <div class="w-full flex items-center gap-2 h-fit mb-2">
+                                    <div class="min-w-2 w-2 h-2 min-h-2 max-h-2 rounded-full <%= colors[getRandomInt(0, colors.length)] %>">
+
+                                    </div>
+                                    <span class="text-sm font-semibold break-all whitespace-normal">
+                                        <%= event.eventName %>
+                                    </span>
+                                    
+                                </div>
+                                <span class="text-xs text-base-content/70"><%= event.eventDate %> | <%= event.eventTime %></span>
+                                <span class="text-xs text-base-content"><%= event.eventType %></span>
+                            </div>
+                        <% }); %>
+                    <% } else {%>
+                        <p class="text-base-content/70">No upcoming events.</p>
+                    <% } %>
+                     
+                    
+                    
+                    
+
+                </div>
+            </div>
+        
+        </div>
+
+    </div>
+    <footer class="footer sm:footer-horizontal footer-center bg-base-300 text-base-content p-4 mt-8">
+        <aside>
+            <p>Copyright © 2025 - All right reserved by Rhim Angelo Sagales</p>
+        </aside>
+    </footer>
+</body>
+</html>

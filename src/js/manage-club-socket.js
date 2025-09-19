@@ -1,3 +1,5 @@
+// Generate club tasks button logic
+
 // Store latest club data for modal injection
 let latestClubData = null;
 // manage-club-socket.js
@@ -218,6 +220,113 @@ function countActiveInactiveClubs(clubs) {
     let inactiveCount = 0;
 }
 
+function createMemberCard({ fullName, email, role = '' }) {
+    // Extract initials (e.g., "John Doe" -> "JD")
+    const initials = fullName.split(' ').map(namePart => namePart.charAt(0).toUpperCase()).join('');
+
+    // Create card element
+    const card = document.createElement('div');
+    card.className = 'card bg-base-200 p-4';
+    card.innerHTML = `
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="avatar w-12 h-12 rounded-full bg-primary text-primary-content flex items-center justify-center text-sm font-bold">
+                    ${initials}
+                </div>
+                <div>
+                    <h4 class="font-semibold">${fullName}</h4>
+                    <p class="text-sm text-base-content/70">${email}</p>
+                    <input 
+                        type="text" 
+                        placeholder="Role" 
+                        value="${role}" 
+                        class="input input-sm input-bordered mt-1 w-full max-w-xs member-role-input" 
+                        />
+                </div>
+            </div>
+            <div class="flex gap-2">
+                <button class="btn btn-sm btn-success btn-outline accept-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                    Accept
+                </button>
+                <button class="btn btn-sm btn-error btn-outline reject-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    Reject
+                </button>
+            </div>
+        </div>
+    `;
+
+    // Add event listeners for Accept/Reject
+    const acceptBtn = card.querySelector('.accept-btn');
+    const rejectBtn = card.querySelector('.reject-btn');
+    const roleInput = card.querySelector('.member-role-input');
+
+    acceptBtn.addEventListener('click', async () => {
+        const roleValue = roleInput.value.trim();
+        const clubName = window.latestClubData?.clubName;
+        if (!clubName) {
+            alert('Club name not found.');
+            return;
+        }
+        try {
+            const res = await fetch('/api/accept-member', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: fullName, email, role: roleValue, clubName })
+            });
+            const result = await res.json();
+            if (result.success) {
+                alert('Member accepted successfully.');
+                card.remove();
+            } else {
+                alert(result.message || 'Failed to accept member.');
+            }
+        } catch (err) {
+            alert('Error accepting member.');
+        }
+    });
+
+    rejectBtn.addEventListener('click', async () => {
+            const clubName = window.latestClubData?.clubName;
+            if (!clubName) {
+                alert('Club name not found.');
+                return;
+            }
+            try {
+                const res = await fetch('/api/reject-member', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: fullName, email, clubName })
+                });
+                const result = await res.json();
+                if (result.success) {
+                    alert('Member rejected and removed.');
+                    card.remove();
+                } else {
+                    alert(result.message || 'Failed to reject member.');
+                }
+            } catch (err) {
+                alert('Error rejecting member.');
+            }
+    });
+
+    return card;
+}
+
+function createTaskItem(taskText) {
+  return `
+    <div class="flex items-center gap-3 p-3 bg-base-200 rounded-lg hover:bg-base-300 transition-colors">
+      <div class="w-2 h-2 bg-primary rounded-full"></div>
+      <span class="text-sm flex-1">${taskText}</span>
+    </div>
+  `;
+}
+
 
 function startClubSocket(){
 
@@ -414,27 +523,49 @@ function injectClubData(clubData) {
         membersListEl.innerHTML = '';
         const membersObj = clubData.members;
         if (membersObj && typeof membersObj === 'object' && Object.keys(membersObj).length > 0) {
-            Object.entries(membersObj).forEach(([role, name]) => {
-                let initials = '?';
-                if (typeof name === 'string' && name.trim()) {
-                    const parts = name.trim().split(' ');
-                    initials = parts.length > 1 ? (parts[0][0] + parts[parts.length-1][0]).toUpperCase() : parts[0][0].toUpperCase();
+            // Object.entries(membersObj).forEach(([role, name]) => {
+            //     let initials = '?';
+            //     if (typeof name === 'string' && name.trim()) {
+            //         const parts = name.trim().split(' ');
+            //         initials = parts.length > 1 ? (parts[0][0] + parts[parts.length-1][0]).toUpperCase() : parts[0][0].toUpperCase();
+            //     }
+            //     const memberDiv = document.createElement('div');
+            //     memberDiv.className = 'flex items-center gap-3 p-2 hover:bg-base-200 rounded-lg';
+            //     memberDiv.innerHTML = `
+            //         <div class="avatar w-8 h-8 rounded-full bg-primary text-primary-content flex items-center justify-center text-xs font-bold">${initials}</div>
+            //         <div class="flex-1">
+            //             <p class="font-medium text-sm">${name || 'N/A'}</p>
+            //             <p class="text-xs text-base-content/70">${role}</p>
+            //         </div>
+            //     `;
+            //     membersListEl.appendChild(memberDiv);
+            // });
+
+                for(const member of Object.values(membersObj)) {
+                    if (!member.pending) {
+                        let initials = '?';
+                        if (typeof member.name === 'string' && member.name.trim()) {
+                            const parts = member.name.trim().split(' ');
+                            initials = parts.length > 1 ? (parts[0][0] + parts[parts.length-1][0]).toUpperCase() : parts[0][0].toUpperCase();
+                        }
+                        const memberDiv = document.createElement('div');
+                        memberDiv.className = 'flex items-center gap-3 p-2 hover:bg-base-200 rounded-lg';
+                        memberDiv.innerHTML = `
+                            <div class="avatar w-8 h-8 rounded-full bg-primary text-primary-content flex items-center justify-center text-xs font-bold">${initials}</div>
+                            <div class="flex-1">
+                                <p class="font-medium text-sm">${member.name || 'N/A'}</p>
+                                <p class="text-xs text-base-content/70">${member.role || 'Member'}</p>
+                            </div>
+                        `;
+                        membersListEl.appendChild(memberDiv);
+                    }
+                    
                 }
-                const memberDiv = document.createElement('div');
-                memberDiv.className = 'flex items-center gap-3 p-2 hover:bg-base-200 rounded-lg';
-                memberDiv.innerHTML = `
-                    <div class="avatar w-8 h-8 rounded-full bg-primary text-primary-content flex items-center justify-center text-xs font-bold">${initials}</div>
-                    <div class="flex-1">
-                        <p class="font-medium text-sm">${name || 'N/A'}</p>
-                        <p class="text-xs text-base-content/70">${role}</p>
-                    </div>
-                `;
-                membersListEl.appendChild(memberDiv);
-            });
+
             // Inject total count of members into header
             const membersHeader = document.querySelector('.members-count-header');
             if (membersHeader) {
-                membersHeader.textContent = `Members (${Object.keys(membersObj).length})`;
+                membersHeader.textContent = `Members (${Object.values(membersObj).filter(member => !member.pending).length})`;
             }
         } else {
             membersListEl.innerHTML = '<div class="text-sm text-base-content/70">No members found.</div>';
@@ -474,5 +605,71 @@ function injectClubData(clubData) {
     })
     }
 
-    
+    //Render Hostname and clubname for student dashboard url
+    const hostnameEl = document.querySelector('.club-join-url-hostname');
+    const hostName = window.location.host ;
+
+    hostnameEl.value = `http://${hostName}/student-dashboard/${btoa((clubData.clubName).replace(/\s+/g, '-'))}`;
+
+    const applicantListEl = document.getElementById('applicantList');
+    if (applicantListEl) {
+        applicantListEl.innerHTML = '';
+        const membersObj = clubData.members;
+        if (Object.values(membersObj).filter(members => members.pending).length > 0) {
+            Object.values(membersObj).forEach(member => {
+                if (member.pending) {
+                    const card = createMemberCard({fullName: member.name, email: member.email});
+                    applicantListEl.appendChild(card);
+                }
+            });
+        } else if(Object.values(membersObj).filter(members => members.pending).length === 0){ 
+            applicantListEl.innerHTML = '<div class="text-sm text-base-content/70">No applicants found.</div>';
+        }
+    }
+
+
+    const generateBtn = document.getElementById('generateTasksBtn');
+    if (generateBtn) {
+        generateBtn.addEventListener('click', async function() {
+            // Gather club info from latestClubData or UI
+            // You may want to get more info from the UI if needed
+            const clubName = clubData.clubName || '';
+            const clubType = clubData.clubType || '';
+            const goals = clubData.goals || '';
+            const requirements = clubData.requirements || '';
+            const description = clubData.clubDescription || '';
+            const members = clubData.members || [];
+            try {
+                const res = await fetch('/api/generate-tasks', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ clubName, clubType, goals, requirements, description, members })
+                });
+                const result = await res.json();
+                if (result.success) {
+                    alert('Tasks generated! Check your clubTask node in the database.');
+                    // Optionally display tasks in the UI
+                    // console.log(result.tasks);
+                } else {
+                    alert(result.message || 'Failed to generate tasks.');
+                }
+            } catch (err) {
+                alert('Error generating tasks.');
+            }
+        });
+    }
+
+    const taskListEl = document.querySelector('.task-list');
+    if (taskListEl) {
+        taskListEl.innerHTML = '';
+        const tasksObj = clubData.clubTask;
+        if (tasksObj && typeof tasksObj === 'object' && Object.keys(tasksObj).length > 0) {
+            Object.values(tasksObj).forEach(task => {
+                const taskItemHTML = createTaskItem(task);
+                taskListEl.insertAdjacentHTML('beforeend', taskItemHTML);
+            });
+        } else {
+            taskListEl.innerHTML = '<div class="text-sm text-base-content/70">No tasks found.</div>';
+        }
+    }
 }

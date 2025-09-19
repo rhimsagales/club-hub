@@ -229,11 +229,11 @@
                             🤖 AI Generated Tasks
                         </h3>
                         <div class="w-full flex justify-end">
-                            <button class="btn-outline btn btn-xs tooltip tooltip-left btn-neutral" data-tip="Generate Task">✨</button>
+                            <button class="btn-outline btn btn-xs tooltip tooltip-left btn-neutral" data-tip="Generate Task" id="generateTasksBtn">✨</button>
                         </div>
                     </div>
-                    <div class="space-y-3 h-[85%] overflow-auto">
-                        <div class="flex items-center gap-3 p-3 bg-base-200 rounded-lg hover:bg-base-300 transition-colors">
+                    <div class="space-y-3 h-[85%] overflow-auto task-list">
+                        <!-- <div class="flex items-center gap-3 p-3 bg-base-200 rounded-lg hover:bg-base-300 transition-colors">
                             <div class="w-2 h-2 bg-primary rounded-full"></div>
                             <span class="text-sm flex-1">Organize monthly member networking event</span>
                             
@@ -252,7 +252,7 @@
                             <div class="w-2 h-2 bg-success rounded-full"></div>
                             <span class="text-sm flex-1">Plan community outreach project</span>
                             
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 
@@ -655,126 +655,8 @@
                     </button>
                 </div>
                 
-                <div class="space-y-4 max-h-96 overflow-y-auto">
-                    <!-- Applicant 1 -->
-                    <div class="card bg-base-200 p-4">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-4">
-                                <div class="avatar w-12 h-12 rounded-full bg-primary text-primary-content flex items-center justify-center text-sm font-bold">
-                                    JD
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold">John Doe</h4>
-                                    <p class="text-sm text-base-content/70">john.doe@email.com</p>
-                                    <p class="text-xs text-base-content/60">Applied 2 days ago</p>
-                                </div>
-                            </div>
-                            <div class="flex gap-2">
-                                <button class="btn btn-sm btn-success btn-outline">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                    Accept
-                                </button>
-                                <button class="btn btn-sm btn-error btn-outline">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                    Reject
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Applicant 2 -->
-                    <div class="card bg-base-200 p-4">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-4">
-                                <div class="avatar w-12 h-12 rounded-full bg-secondary text-secondary-content flex items-center justify-center text-sm font-bold">
-                                    JS
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold">Jane Smith</h4>
-                                    <p class="text-sm text-base-content/70">jane.smith@email.com</p>
-                                    <p class="text-xs text-base-content/60">Applied 1 day ago</p>
-                                </div>
-                            </div>
-                            <div class="flex gap-2">
-                                <button class="btn btn-sm btn-success btn-outline">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                    Accept
-                                </button>
-                                <button class="btn btn-sm btn-error btn-outline">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                    Reject
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Applicant 3 -->
-                    <div class="card bg-base-200 p-4">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-4">
-                                <div class="avatar w-12 h-12 rounded-full bg-accent text-accent-content flex items-center justify-center text-sm font-bold">
-                                    RB
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold">Robert Brown</h4>
-                                    <p class="text-sm text-base-content/70">robert.brown@email.com</p>
-                                    <p class="text-xs text-base-content/60">Applied 3 days ago</p>
-                                </div>
-                            </div>
-                            <div class="flex gap-2">
-                                <button class="btn btn-sm btn-success btn-outline">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                    Accept
-                                </button>
-                                <button class="btn btn-sm btn-error btn-outline">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                    Reject
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Applicant 4 -->
-                    <div class="card bg-base-200 p-4">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center gap-4">
-                                <div class="avatar w-12 h-12 rounded-full bg-neutral text-neutral-content flex items-center justify-center text-sm font-bold">
-                                    LW
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold">Lisa Wilson</h4>
-                                    <p class="text-sm text-base-content/70">lisa.wilson@email.com</p>
-                                    <p class="text-xs text-base-content/60">Applied 5 days ago</p>
-                                </div>
-                            </div>
-                            <div class="flex gap-2">
-                                <button class="btn btn-sm btn-success btn-outline">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                    Accept
-                                </button>
-                                <button class="btn btn-sm btn-error btn-outline">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                    Reject
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                <div class="space-y-4 max-h-96 overflow-y-auto" id="applicantList">
+                    
                 </div>
 
                 <div class="modal-action">
@@ -811,7 +693,7 @@
                             <span class="label-text font-semibold">Dashboard Link</span>
                         </label>
                         <div class="flex gap-2">
-                            <input type="text" id="dashboardLink" class="input input-bordered flex-1" value="https://clubhub.com/dashboard/tech-innovators-club/abc123xyz" readonly />
+                            <input type="text" id="dashboardLink" class="input input-bordered flex-1 club-join-url-hostname" value="https://clubhub.com/dashboard/tech-innovators-club/abc123xyz" readonly />
                             <button class="btn btn-primary" onclick="copyDashboardLink()">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />

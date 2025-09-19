@@ -49,9 +49,15 @@ document.addEventListener('DOMContentLoaded', function() {
             activeStatus: true,
             memberRecruitment: true,
             clubTask: [],
-            members:{
-                "Club Owner": clubOwner
-            },
+            members:[
+                {
+                    name: clubOwner,
+                    role: "Club Owner",
+                    email: email,
+                    number: phone,
+                    pending : false
+                }
+            ],
             events: {}
 
         };

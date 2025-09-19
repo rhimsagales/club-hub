@@ -24,6 +24,12 @@
             <a href="admin-dashboard.html" class="btn btn-ghost text-4xl cherry-bomb-one-regular text-primary">ClubHub</a>
         </div>
     </div>
+
+    <% 
+        function countOfOfficialMembers(club) {
+            return Object.values(club.members).filter(member => !member.pending).length;
+        }
+     %>
     <main class="w-full min-h-screen flex items-center justify-center flex-col gap-2 pt-16">
         <div class="w-[75%] max-w-3xl flex flex-col items-center">
             <h1 class="text-4xl font-bold text-accent my-6 text-center w-full">Recruit Club Members</h1>
@@ -57,15 +63,22 @@
                             <label class="label">
                                 <span class="label-text text-lg font-semibold">Select Club *</span>
                             </label>
-                            <select name="club" class="select select-bordered w-full" required>
+                            <select name="club" class="select select-bordered w-full required-field">
                                 <option value="" disabled selected>Choose a club</option>
-                                <option value="Academic">Academic</option>
+                                <!-- <option value="Academic">Academic</option>
                                 <option value="Sports">Sports</option>
                                 <option value="Cultural">Cultural</option>
                                 <option value="Social">Social</option>
                                 <option value="Professional">Professional</option>
                                 <option value="Religious">Religious</option>
-                                <option value="Other">Other</option>
+                                <option value="Other">Other</option> -->
+
+                                <% for(const clubId in clubs){ %>
+                                    <% const club = clubs[clubId]; %>
+                                    <% if (club.memberRecruitment && countOfOfficialMembers(club) <= parseInt(club.maxMembers)) { %>
+                                        <option value="<%= club.clubName %>"><%= club.clubName %></option>
+                                    <% } %>
+                                <% } %>
                             </select>
                         </div>
                     </div>
@@ -75,37 +88,37 @@
                             <label class="label">
                                 <span class="label-text">Full Name *</span>
                             </label>
-                            <input type="text" name="name" placeholder="Enter your name" class="input input-bordered w-full" required />
+                            <input type="text" name="name" placeholder="Enter your name" class="input input-bordered w-full required-field" />
                         </div>
                         <div class="form-control">
                             <label class="label">
                                 <span class="label-text">Email Address *</span>
                             </label>
-                            <input type="email" name="email" placeholder="Enter your email" class="input input-bordered w-full" required />
+                            <input type="email" name="email" placeholder="Enter your email" class="input input-bordered w-full required-field" />
                         </div>
                         <div class="form-control">
                             <label class="label">
                                 <span class="label-text">Phone Number *</span>
                             </label>
-                            <input type="tel" name="number" placeholder="Enter your phone number" class="input input-bordered w-full" required />
+                            <input type="tel" name="number" placeholder="Enter your phone number" class="input input-bordered w-full required-field" />
                         </div>
                         <div class="form-control">
                             <label class="label">
                                 <span class="label-text">Section *</span>
                             </label>
-                            <input type="text" name="section" placeholder="Enter your section" class="input input-bordered w-full" required />
+                            <input type="text" name="section" placeholder="Enter your section" class="input input-bordered w-full required-field" />
                         </div>
                         <div class="form-control">
                             <label class="label">
                                 <span class="label-text">Year Level *</span>
                             </label>
-                            <input type="text" name="yearLevel" placeholder="Enter your year level" class="input input-bordered w-full" required />
+                            <input type="text" name="yearLevel" placeholder="Enter your year level" class="input input-bordered w-full required-field" />
                         </div>
                         <div class="form-control">
                             <label class="label">
                                 <span class="label-text">Student ID *</span>
                             </label>
-                            <input type="text" name="studentId" placeholder="Enter your student ID" class="input input-bordered w-full" required />
+                            <input type="text" name="studentId" placeholder="Enter your student ID" class="input input-bordered w-full required-field" />
                         </div>
                     </div>
                     <!-- Navigation Buttons -->
@@ -139,6 +152,7 @@
             </div>
         </div>
     </main>
+    <!-- <script src="../src/js/recruit-member-send-req.js"></script> -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('recruitForm');
@@ -194,7 +208,7 @@
                 currentPage = page;
             }
             function validateFields(container) {
-                const requiredFields = container.querySelectorAll('[required]');
+                const requiredFields = container.querySelectorAll('.required-field');
                 let isValid = true;
                 requiredFields.forEach(field => {
                     let isEmpty = false;
@@ -224,18 +238,69 @@
             prevBtn.addEventListener('click', () => {
                 showPage(1);
             });
-            form.addEventListener('submit', (e) => {
+            
+            // recruit-member-send-req.js
+            // Handles recruit member form submission, validation, and POST request
+
+            
+            if (!form) return;
+
+            form.addEventListener('submit', async (e) => {
                 e.preventDefault();
-                const page1Valid = validateFields(page1);
-                const page2Valid = validateFields(page2);
-                if (!page1Valid || !page2Valid) {
+                // Validate required fields
+                const requiredFields = form.querySelectorAll('.required-field');
+                let isValid = true;
+                requiredFields.forEach(field => {
+                    let isEmpty = false;
+                    if (field.type === 'checkbox') {
+                        isEmpty = !field.checked;
+                    } else if (field.tagName === 'SELECT') {
+                        isEmpty = !field.value || field.value === '';
+                    } else {
+                        isEmpty = !field.value.trim();
+                    }
+                    if (isEmpty) {
+                        field.classList.add('input-error');
+                        isValid = false;
+                    } else {
+                        field.classList.remove('input-error');
+                    }
+                });
+                if (!isValid) {
                     alert('Please fill in all required fields before submitting.');
                     return;
                 }
-                alert('Your application has been submitted!');
-                form.reset();
-                showPage(1);
+                // Gather form data
+                const data = {
+                    club: form.club.value,
+                    name: form.name.value,
+                    email: form.email.value,
+                    number: form.number.value,
+                    section: form.section.value,
+                    yearLevel: form.yearLevel.value,
+                    studentId: form.studentId.value
+                };
+                try {
+                    const response = await fetch('/api/recruit-member', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(data)
+                    });
+                    const result = await response.json();
+                    if (response.ok && result.success) {
+                        alert('Your application has been submitted!');
+                        form.reset();
+                    } else {
+                        alert(result.message || 'Submission failed. Please try again.');
+                    }
+                } catch (err) {
+                    alert('An error occurred while submitting. Please try again later.');
+                }
             });
+
+
             showPage(1);
         });
     </script>
