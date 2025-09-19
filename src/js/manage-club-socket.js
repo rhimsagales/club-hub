@@ -391,6 +391,37 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // Attach event listener to Delete Club button
+    const deleteBtn = document.querySelector('.btn-error[onclick="deleteClub()"]');
+    if (deleteBtn) {
+        deleteBtn.addEventListener('click', async function() {
+            const clubName = window.latestClubData?.clubName;
+            if (!clubName) {
+                alert('Club name not found.');
+                return;
+            }
+            if (!confirm(`Are you sure you want to delete the club: ${clubName}? This action cannot be undone.`)) {
+                return;
+            }
+            try {
+                const res = await fetch('/api/delete-club', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ clubName })
+                });
+                const result = await res.json();
+                if (result.success) {
+                    alert('Club deleted successfully.');
+                    window.location.href = '/'; // Redirect to home or another page
+                } else {
+                    alert(result.message || 'Failed to delete club.');
+                }
+            } catch (err) {
+                alert('Error deleting club.');
+            }
+        });
+    }
 });
 
 // Socket.io connection and club data listener
