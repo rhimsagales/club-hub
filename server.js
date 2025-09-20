@@ -15,8 +15,7 @@ const io = socketio(server);
 const PORT = process.env.PORT || 3000;
 
 
-const fetch = (...args) => import('node-fetch').then(mod => mod.default(...args));
-const HF_API_TOKEN = process.env.HF_API_TOKEN || 'YOUR_HF_API_TOKEN_HERE';
+
 
 // Set EJS as the view engine
 app.set('view engine', 'ejs');
