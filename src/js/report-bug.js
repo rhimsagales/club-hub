@@ -29,14 +29,29 @@ document.addEventListener('DOMContentLoaded', () => {
         return true;
     }
 
+    // Prevent duplicate submissions
+    let isSubmitting = false;
+
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        // Prevent duplicate submissions
+        if (isSubmitting) {
+            return;
+        }
 
         const isValid = validateAllRequired(form);
         if (!isValid) {
             alert('Please fill in all required fields. The page will reload.');
             window.location.reload();
             return;
+        }
+
+        isSubmitting = true;
+        const submitBtn = document.getElementById('submitBtn');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
         }
 
         const payload = collectFormData(form);
@@ -58,17 +73,57 @@ document.addEventListener('DOMContentLoaded', () => {
             const successModal = document.getElementById('successModal');
             if (successModal && typeof successModal.showModal === 'function') {
                 successModal.showModal();
+                
+                // Add event listener for modal close button
+                const closeBtn = successModal.querySelector('button[onclick*="close"]');
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', () => {
+                        successModal.close();
+                        // Reset form and page after modal closes
+                        form.reset();
+                        // Reset to page 1 if showPage function exists
+                        if (typeof showPage === 'function') {
+                            showPage(1);
+                        }
+                    });
+                }
+                
+                // Add event listener for modal backdrop
+                const backdrop = successModal.querySelector('.modal-backdrop');
+                if (backdrop) {
+                    backdrop.addEventListener('click', () => {
+                        successModal.close();
+                        form.reset();
+                        if (typeof showPage === 'function') {
+                            showPage(1);
+                        }
+                    });
+                }
             } else {
                 alert(result.message || 'Bug report submitted successfully.');
+                form.reset();
+                if (typeof showPage === 'function') {
+                    showPage(1);
+                }
             }
 
             // Clear any saved draft after successful submission
             try { localStorage.removeItem('bugReportDraft'); } catch {}
 
-            form.reset();
         } catch (err) {
             console.error(err);
             alert('There was an error submitting your bug report. Please try again later.');
+        } finally {
+            isSubmitting = false;
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
+                    Submit Bug Report
+                `;
+            }
         }
     });
 });
