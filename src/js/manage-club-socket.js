@@ -57,31 +57,31 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-        // Save changes for Contact Info form
-        const contactInfoForm = document.querySelector('#contactInfoModal form');
-        if (contactInfoForm) {
-            contactInfoForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                const phone = contactInfoForm.elements['phone'].value.trim();
-                const email = contactInfoForm.elements['email'].value.trim();
-                const socialMedia = contactInfoForm.elements['socialMedia'].value.trim();
-                try {
-                    await fetch('/api/update-club', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            username: window.clubUsername,
-                            phone,
-                            email,
-                            socialMedia
-                        })
-                    });
-                    if (typeof contactInfoModal !== 'undefined') contactInfoModal.close();
-                } catch (err) {
-                    alert('Failed to save contact info.');
-                }
-            });
-        }
+    // Save changes for Contact Info form
+    const contactInfoForm = document.querySelector('#contactInfoModal form');
+    if (contactInfoForm) {
+        contactInfoForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const phone = contactInfoForm.elements['phone'].value.trim();
+            const email = contactInfoForm.elements['email'].value.trim();
+            const socialMedia = contactInfoForm.elements['socialMedia'].value.trim();
+            try {
+                await fetch('/api/update-club', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        username: window.clubUsername,
+                        phone,
+                        email,
+                        socialMedia
+                    })
+                });
+                if (typeof contactInfoModal !== 'undefined') contactInfoModal.close();
+            } catch (err) {
+                alert('Failed to save contact info.');
+            }
+        });
+    }
 
     // Member Recruit switch logic
     const memberRecruitSwitch = document.getElementById('clubMemberRecruitSwitch');
@@ -459,7 +459,7 @@ function getRandomInt(min, max) {
 }
 
 const colors = ['bg-sucess', 'bg-error', 'bg-warning', 'bg-info', 'bg-primary', 'bg-secondary', 'bg-accent'];
-
+let generateTasksHandler = null;
 // Replace placeholder data with real club data
 function injectClubData(clubData) {
     // Inject data into Club Description form textarea
@@ -658,12 +658,14 @@ function injectClubData(clubData) {
         }
     }
 
-
+    
     const generateBtn = document.getElementById('generateTasksBtn');
     if (generateBtn) {
-        generateBtn.addEventListener('click', async function() {
-            // Gather club info from latestClubData or UI
-            // You may want to get more info from the UI if needed
+        if (generateTasksHandler) {
+            generateBtn.removeEventListener('click', generateTasksHandler);
+        }
+        // Create a new handler with the current clubData
+        generateTasksHandler = async function() {
             const clubName = clubData.clubName || '';
             const clubType = clubData.clubType || '';
             const goals = clubData.goals || '';
@@ -687,7 +689,9 @@ function injectClubData(clubData) {
             } catch (err) {
                 alert('Error generating tasks.');
             }
-        });
+        };
+        // Add the new listener
+        generateBtn.addEventListener('click', generateTasksHandler);
     }
 
     const taskListEl = document.querySelector('.task-list');

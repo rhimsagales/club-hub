@@ -43,9 +43,6 @@ ClubHub is a comprehensive platform for managing student clubs, designed to stre
 - **Responsive Design:** Modern, mobile-friendly UI using EJS and custom CSS.
 
 ## Incomplete / Planned Features
-
-- **Notifications:** Real-time notifications for member applications, event reminders, and club updates.
-- **Email Integration:** Automated emails for recruitment, event invites, and announcements.
 - **Advanced AI Models:** Support for more advanced or instruction-following models for better task generation.
 - **Member Profiles:** Detailed member profiles with activity history and achievements.
 
@@ -53,7 +50,7 @@ ClubHub is a comprehensive platform for managing student clubs, designed to stre
 
 1. Clone the repository and install dependencies:
    ```sh
-   git clone <repo-url>
+   git clone https://github.com/rhimsagales/club-hub.git
    cd ClubHub
    npm install
    ```
@@ -62,7 +59,7 @@ ClubHub is a comprehensive platform for managing student clubs, designed to stre
    ```sh
    node server.js
    ```
-4. Access the dashboard at `http://localhost:3000`.
+4. Access the dashboard at `http://localhost:3000/pages/admin-dashboard.html`.
 
 ## Technologies Used
 - Node.js

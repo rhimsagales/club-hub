@@ -111,6 +111,9 @@ app.post('/api/recruit-member', async (req, res) => {
 });
 
 
+app.get('/index', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 app.get('/student-dashboard/:clubId', async (req, res) => {
     const clubIdEncoded = req.params.clubId;
@@ -405,6 +408,52 @@ app.post('/api/reject-member', async (req, res) => {
     } catch (err) {
         console.error('Error rejecting member:', err);
         return res.status(500).json({ success: false, message: 'Server error.' });
+    }
+});
+
+// Bug report route
+app.post('/api/report-bug', async (req, res) => {
+    const bugReport = req.body;
+    
+    // Validate required fields
+    if (!bugReport.bugTitle || !bugReport.severity || !bugReport.pageFeature || 
+        !bugReport.description || !bugReport.reporterName || !bugReport.email || 
+        !bugReport.terms) {
+        return res.status(400).json({ 
+            success: false, 
+            message: 'Missing required fields. Please fill in all required information.' 
+        });
+    }
+
+    try {
+        // Add timestamp and unique ID to the bug report
+        const bugData = {
+            ...bugReport,
+            id: `bug_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+            timestamp: Date.now(),
+            status: 'Open',
+            createdAt: new Date().toISOString()
+        };
+
+        // Store bug report in the top-level 'bugs' node
+        const bugsRef = admin.database().ref('bugs');
+        const newBugRef = bugsRef.push();
+        await newBugRef.set(bugData);
+
+        console.log('Bug report submitted:', bugData.id);
+
+        return res.json({ 
+            success: true, 
+            message: 'Bug report submitted successfully. Thank you for your feedback!',
+            bugId: bugData.id
+        });
+
+    } catch (err) {
+        console.error('Error submitting bug report:', err);
+        return res.status(500).json({ 
+            success: false, 
+            message: 'Server error. Please try again later.' 
+        });
     }
 });
 
